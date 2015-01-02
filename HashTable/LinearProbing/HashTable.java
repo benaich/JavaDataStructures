@@ -40,22 +40,32 @@ public class HashTable<K, V> {
         }
         int index = indexOf(key);
         int i = index;
-        while (array[i] != null && array[i].getKey().equals(key)){
-            i = (i + 1 % array.length);
+        while (array[i] != null && !array[i].getKey().equals(key)) {
+            i = (i + 1) % array.length;
         }
         if (i != index) {
             numCollisions++;
         }
+        if (array[i] == null) {
+            size++;
+        }
         array[i] = new Node(key, val);
-        size++;
     }
 
     public V get(K key) {
         int i = indexOf(key);
         while (array[i] != null && !array[i].getKey().equals(key)) {
-            i = (i + 1 % array.length);
+            i = (i + 1) % array.length;
         }
-        return (array[i] != null) ? (V)array[i].getValue() : null;
+        return (array[i] != null) ? (V) array[i].getValue() : null;
+    }
+
+    public void delete(K key) {
+        int i = indexOf(key);
+        while (array[i] != null && !array[i].getKey().equals(key)) {
+            i = (i + 1) % array.length;
+        }
+        array[i] = null;
     }
 
     public void resize() {
@@ -65,8 +75,9 @@ public class HashTable<K, V> {
         tableSize = tableSize * 2;
         for (int i = 0; i < oldArray.length; i++) {
             Node<K, V> node = oldArray[i];
-            if(node != null)
+            if (node != null) {
                 put(node.getKey(), node.getValue());
+            }
         }
     }
 
@@ -97,7 +108,7 @@ public class HashTable<K, V> {
         for (int i = 0; i < array.length; i++) {
 
             if (array[i] != null) {
-                System.out.print(i + " -> " + array[i]);
+                System.out.print(i + " -> " + array[i] + indexOf((K) array[i].getKey()));
             } else {
                 System.out.print(i + " -> x");
             }
@@ -131,32 +142,33 @@ public class HashTable<K, V> {
         Function<String, Integer> modulo = x -> Math.abs(x.hashCode()) % INITIAL_TABLE_SIZE;
 
         HashTable<String, String> ht = new HashTable<>(modulo);
-         ht.put("banana", "yellow");
-         ht.put("apple", "green");
-         ht.put("android", "green");
-         ht.put("cat", "white");
-         ht.put("body", "black");
+        ht.put("banana", "yellow");
+        ht.put("apple", "green");
+        ht.put("android", "green");
+        ht.put("cat", "white");
+        ht.put("body", "black");
+        ht.put("glass", "red");
 
-         System.out.println("----------- Print -----------");
-         ht.print();
+        System.out.println("----------- Print -----------");
+        ht.print();
 
-         System.out.println("----------- Get -----------");
-         String deletedKey = "apple";
-         System.out.println(deletedKey + " : i -> " + ht.indexOf(deletedKey) + " -> " + ht.get(deletedKey));
+        System.out.println("----------- Get -----------");
+        String deletedKey = "body";
+        System.out.println(deletedKey + " : i -> " + ht.indexOf(deletedKey) + " -> " + ht.get(deletedKey));
 
-         System.out.println("----------- Delete -----------");
-        // ht.delete(deletedKey);
-         System.out.println("----------- Print -----------");
-         ht.print();
-         
+        System.out.println("----------- Delete -----------");
+        ht.delete(deletedKey);
+        System.out.println("----------- Print -----------");
+        ht.print();
+
         /*HashTable<String, String> table = new HashTable<>(modulo);
 
-        for (int i = 0; i < 100000; i++) {
-            table.put(randomString(), randomString());
-        }
+         for (int i = 0; i < 100000; i++) {
+         table.put(randomString(), randomString());
+         }
 
-        System.out.println(table.getNumCollisions());
-        System.out.println(table.getNumResizes());*/
+         System.out.println(table.getNumCollisions());
+         System.out.println(table.getNumResizes());*/
     }
 
     public static String randomString() {

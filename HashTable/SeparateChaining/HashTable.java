@@ -1,4 +1,4 @@
-package HashTable;
+package HashTable.SeparateChaining;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -36,40 +36,22 @@ public class HashTable<K, V> {
 
     public void put(K key, V val) {
         int index = indexOf(key);
-        HashNode e = new HashNode(key, val);
 
         if (loadFactor() > LOAD_FACTOR) {
-            //resize
-            numResizes++;
-            HashNode[] oldArray = array;
-            array = new HashNode[tableSize * 2];
-            tableSize = tableSize * 2;
-            for (int i = 0; i < oldArray.length; i++) {
-                HashNode<K, V> node = oldArray[i];
-                while (node != null) {
-                    put(node.getKey(), node.getValue());
-                    node = node.getNext();
-                }
-            }
+            resize();
         }
+
         HashNode<K, V> node = array[index];
-        while(null != node){
-            if(node.getKey().equals(key)){
+        while (null != node) {
+            if (node.getKey().equals(key)) {
                 node.setValue(val);
                 return;
             }
+            node = node.getNext();
         }
         array[index] = new HashNode(key, val, array[index]);
         numCollisions++;
         size++;
-    }
-
-    public void insert(HashNode old, HashNode e) {
-        if (old.getNext() == null) {
-            old.setNext(e);
-        } else {
-            insert(old.getNext(), e);
-        }
     }
 
     public V get(K key) {
@@ -99,6 +81,20 @@ public class HashTable<K, V> {
                 return;
             }
             node = node.getNext();
+        }
+    }
+
+    public void resize() {
+        numResizes++;
+        HashNode[] oldArray = array;
+        array = new HashNode[tableSize * 2];
+        tableSize = tableSize * 2;
+        for (int i = 0; i < oldArray.length; i++) {
+            HashNode<K, V> node = oldArray[i];
+            while (node != null) {
+                put(node.getKey(), node.getValue());
+                node = node.getNext();
+            }
         }
     }
 
@@ -170,24 +166,42 @@ public class HashTable<K, V> {
     public static void main(String[] args) {
         Function<String, Integer> modulo = x -> Math.abs(x.hashCode()) % INITIAL_TABLE_SIZE;
 
-        HashTable<String, String> ht = new HashTable<>();
-        ht.put("banana", "yellow");
-        ht.put("apple", "green");
-        ht.put("android", "green");
-        ht.put("cat", "white");
-        ht.put("body", "black");
+         /*HashTable<String, String> ht = new HashTable<>();
+         ht.put("banana", "yellow");
+         ht.put("apple", "green");
+         ht.put("android", "green");
+         ht.put("cat", "white");
+         ht.put("body", "black");
 
-        System.out.println("----------- Print -----------");
-        ht.print();
+         System.out.println("----------- Print -----------");
+         ht.print();
 
-        System.out.println("----------- Get -----------");
-        String deletedKey = "apple";
-        System.out.println(deletedKey + " : i -> " + ht.indexOf(deletedKey) + " -> " + ht.get(deletedKey));
+         System.out.println("----------- Get -----------");
+         String deletedKey = "apple";
+         System.out.println(deletedKey + " : i -> " + ht.indexOf(deletedKey) + " -> " + ht.get(deletedKey));
 
-        System.out.println("----------- Delete -----------");
-        ht.delete(deletedKey);
-        System.out.println("----------- Print -----------");
-        ht.print();
+         System.out.println("----------- Delete -----------");
+         ht.delete(deletedKey);
+         System.out.println("----------- Print -----------");
+         ht.print();
+         */
+        HashTable<String, String> table = new HashTable<>(modulo);
+
+        for (int i = 0; i < 100000; i++) {
+            table.put(randomString(), randomString());
+        }
+
+        System.out.println(table.getNumCollisions());
+        System.out.println(table.getNumResizes());
     }
 
+    public static String randomString() {
+        Random r = new Random(); // perhaps make it a class variable so you don't make a new one every time
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            char c = (char) (r.nextInt((int) (Character.MAX_VALUE)));
+            sb.append(c);
+        }
+        return sb.toString();
+    }
 }

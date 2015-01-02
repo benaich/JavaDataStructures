@@ -1,4 +1,4 @@
-package HashTable;
+package HashTable.SeparateChaining;
 
 public class HashNode<K, V> {
 

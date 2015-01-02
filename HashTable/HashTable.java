@@ -34,7 +34,7 @@ public class HashTable<K, V> {
         return foh.apply(key);
     }
 
-    public void insert(K key, V val) {
+    public void put(K key, V val) {
         int index = indexOf(key);
         HashNode e = new HashNode(key, val);
 
@@ -47,18 +47,20 @@ public class HashTable<K, V> {
             for (int i = 0; i < oldArray.length; i++) {
                 HashNode<K, V> node = oldArray[i];
                 while (node != null) {
-                    insert(node.getKey(), node.getValue());
+                    put(node.getKey(), node.getValue());
                     node = node.getNext();
                 }
             }
         }
-
-        if (array[index] == null) {
-            array[index] = e;
-        } else {
-            insert(array[index], e);
-            numCollisions++;
+        HashNode<K, V> node = array[index];
+        while(null != node){
+            if(node.getKey().equals(key)){
+                node.setValue(val);
+                return;
+            }
         }
+        array[index] = new HashNode(key, val, array[index]);
+        numCollisions++;
         size++;
     }
 
@@ -84,7 +86,20 @@ public class HashTable<K, V> {
 
     public void delete(K key) {
         int index = indexOf(key);
-        array[index] = null;
+        HashNode<K, V> node = array[index];
+        while (node != null) {
+            if (node.getKey().equals(key)) {
+                if (node.getNext() == null) {
+                    array[index] = null;
+                } else {
+                    array[index].setKey(node.getNext().getKey());
+                    array[index].setValue(node.getNext().getValue());
+                    array[index].setNext(node.getNext().getNext());
+                }
+                return;
+            }
+            node = node.getNext();
+        }
     }
 
     public int getSize() {
@@ -100,24 +115,24 @@ public class HashTable<K, V> {
     }
 
     private void CreateHashingFunction() {
-        foh = (x) -> {
-            Random r = new Random();
-            int a, b, p;
-            a = r.nextInt();
-            b = r.nextInt();
-            p = nextPrime(BIGNUMBER);
 
-            return Math.abs(((a * x.hashCode() + b * x.hashCode()) * p) % tableSize);
-        };
+        Random r = new Random();
+        int a, b, p;
+        a = r.nextInt();
+        b = r.nextInt();
+        p = nextPrime(BIGNUMBER);
+
+        foh = (x) -> Math.abs(((a * x.hashCode() + b * x.hashCode()) * p) % tableSize);
     }
 
     public void print() {
-        for (HashNode item : array) {
-            if (item != null) {
-                System.out.print(item);
-                print(item.getNext());
+        for (int i = 0; i < array.length; i++) {
+
+            if (array[i] != null) {
+                System.out.print(i + " -> " + array[i]);
+                print(array[i].getNext());
             } else {
-                System.out.println("x");
+                System.out.print(i + " -> x");
             }
             System.out.println();
         }
@@ -153,20 +168,25 @@ public class HashTable<K, V> {
     }
 
     public static void main(String[] args) {
-        HashTable<String, String> ht = new HashTable<>(x -> Math.abs(x.hashCode()) % INITIAL_TABLE_SIZE);
-        ht.insert("banana", "yellow");
-        ht.insert("apple", "green");
-        ht.insert("android", "green");
-        ht.insert("cat", "white");
-        ht.insert("body", "black");
-        
+        Function<String, Integer> modulo = x -> Math.abs(x.hashCode()) % INITIAL_TABLE_SIZE;
+
+        HashTable<String, String> ht = new HashTable<>();
+        ht.put("banana", "yellow");
+        ht.put("apple", "green");
+        ht.put("android", "green");
+        ht.put("cat", "white");
+        ht.put("body", "black");
+
+        System.out.println("----------- Print -----------");
         ht.print();
-        
+
         System.out.println("----------- Get -----------");
-        System.out.println("apple : " + ht.get("apple"));
-        
-        
-        ht.delete("apple");
+        String deletedKey = "apple";
+        System.out.println(deletedKey + " : i -> " + ht.indexOf(deletedKey) + " -> " + ht.get(deletedKey));
+
+        System.out.println("----------- Delete -----------");
+        ht.delete(deletedKey);
+        System.out.println("----------- Print -----------");
         ht.print();
     }
 

@@ -1,17 +1,17 @@
 package HashTable.SeparateChaining;
 
-public class HashNode<K, V> {
+public class Node<K, V> {
 
     private K key;
     private V value;
-    private HashNode<K, V> next;
+    private Node<K, V> next;
 
-    public HashNode(K key, V value) {
+    public Node(K key, V value) {
         setKey(key);
         setValue(value);
     }
 
-    public HashNode(K key, V value, HashNode<K, V> next) {
+    public Node(K key, V value, Node<K, V> next) {
         setKey(key);
         setValue(value);
         setNext(next);
@@ -33,11 +33,11 @@ public class HashNode<K, V> {
         this.key = key;
     }
 
-    public HashNode<K, V> getNext() {
+    public Node<K, V> getNext() {
         return next;
     }
 
-    public void setNext(HashNode<K, V> next) {
+    public void setNext(Node<K, V> next) {
         this.next = next;
     }
 

@@ -9,7 +9,7 @@ public class HashTable<K, V> {
     public static final double LOAD_FACTOR = 0.5;
     public static final int BIGNUMBER = 3345;
 
-    private HashNode[] array;
+    private Node[] array;
     private Function<K, Integer> foh;
     private int tableSize = INITIAL_TABLE_SIZE;
     private int size;
@@ -17,12 +17,12 @@ public class HashTable<K, V> {
     private static int numResizes = 0;
 
     public HashTable() {
-        array = new HashNode[tableSize];
+        array = new Node[tableSize];
         CreateHashingFunction();
     }
 
     public HashTable(Function<K, Integer> f) {
-        array = new HashNode[INITIAL_TABLE_SIZE];
+        array = new Node[INITIAL_TABLE_SIZE];
         foh = f;
     }
 
@@ -41,7 +41,7 @@ public class HashTable<K, V> {
             resize();
         }
 
-        HashNode<K, V> node = array[index];
+        Node<K, V> node = array[index];
         while (null != node) {
             if (node.getKey().equals(key)) {
                 node.setValue(val);
@@ -49,14 +49,14 @@ public class HashTable<K, V> {
             }
             node = node.getNext();
         }
-        array[index] = new HashNode(key, val, array[index]);
+        array[index] = new Node(key, val, array[index]);
         numCollisions++;
         size++;
     }
 
     public V get(K key) {
         int index = indexOf(key);
-        HashNode<K, V> node = array[index];
+        Node<K, V> node = array[index];
         while (node != null) {
             if (node.getKey().equals(key)) {
                 return node.getValue();
@@ -68,7 +68,7 @@ public class HashTable<K, V> {
 
     public void delete(K key) {
         int index = indexOf(key);
-        HashNode<K, V> node = array[index];
+        Node<K, V> node = array[index];
         while (node != null) {
             if (node.getKey().equals(key)) {
                 if (node.getNext() == null) {
@@ -86,11 +86,11 @@ public class HashTable<K, V> {
 
     public void resize() {
         numResizes++;
-        HashNode[] oldArray = array;
-        array = new HashNode[tableSize * 2];
+        Node[] oldArray = array;
+        array = new Node[tableSize * 2];
         tableSize = tableSize * 2;
         for (int i = 0; i < oldArray.length; i++) {
-            HashNode<K, V> node = oldArray[i];
+            Node<K, V> node = oldArray[i];
             while (node != null) {
                 put(node.getKey(), node.getValue());
                 node = node.getNext();
@@ -134,7 +134,7 @@ public class HashTable<K, V> {
         }
     }
 
-    public void print(HashNode e) {
+    public void print(Node e) {
         if (e == null) {
             return;
         }

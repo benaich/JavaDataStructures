@@ -11,6 +11,12 @@ public class HashNode<K, V> {
         setValue(value);
     }
 
+    public HashNode(K key, V value, HashNode<K, V> next) {
+        setKey(key);
+        setValue(value);
+        setNext(next);
+    }
+
     public V getValue() {
         return value;
     }
@@ -37,6 +43,6 @@ public class HashNode<K, V> {
 
     @Override
     public String toString() {
-        return "("+ key + ", " + value + ")";
+        return "(" + key + ", " + value + ")";
     }
 }

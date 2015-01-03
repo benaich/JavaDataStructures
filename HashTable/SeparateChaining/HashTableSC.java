@@ -3,7 +3,7 @@ package HashTable.SeparateChaining;
 import HashTable.HashTableInterface;
 import java.util.function.Function;
 
-public class HashTable<K, V> implements HashTableInterface<K, V> {
+public class HashTableSC<K, V> implements HashTableInterface<K, V> {
 
     private Node[] array;
     private Function<K, Integer> foh;
@@ -12,12 +12,12 @@ public class HashTable<K, V> implements HashTableInterface<K, V> {
     private int numCollisions = 0;
     private int numResizes = 0;
 
-    public HashTable() {
+    public HashTableSC() {
         array = new Node[tableSize];
         foh = getHashingFunction();
     }
 
-    public HashTable(Function<K, Integer> f) {
+    public HashTableSC(Function<K, Integer> f) {
         array = new Node[tableSize];
         foh = f;
     }
@@ -98,8 +98,7 @@ public class HashTable<K, V> implements HashTableInterface<K, V> {
         numResizes++;
         clear();
 
-        for (int i = 0; i < oldArray.length; i++) {
-            Node<K, V> node = oldArray[i];
+        for (Node<K, V> node : oldArray) {
             while (node != null) {
                 put(node.getKey(), node.getValue());
                 node = node.getNext();
@@ -160,7 +159,7 @@ public class HashTable<K, V> implements HashTableInterface<K, V> {
 
     public static void main(String[] args) {
 
-        HashTable<String, String> ht = new HashTable<>();
+        HashTableSC<String, String> ht = new HashTableSC<>();
         ht.put("banana", "yellow");
         ht.put("apple", "green");
         ht.put("android", "green");
@@ -186,7 +185,7 @@ public class HashTable<K, V> implements HashTableInterface<K, V> {
         ht.printStatus();
         
         // Testing
-        HashTable<String, String> table = new HashTable<>();
+        HashTableSC<String, String> table = new HashTableSC<>();
         for (int i = 0; i < 100000; i++) {
             table.put(HashTableInterface.randomString(), HashTableInterface.randomString());
         }

@@ -1,10 +1,9 @@
 package HashTable.LinearProbing;
 
 import HashTable.HashTableInterface;
-import java.util.Random;
 import java.util.function.Function;
 
-public class HashTable<K, V> implements HashTableInterface<K, V> {
+public class HashTableLP<K, V> implements HashTableInterface<K, V> {
 
     private Node[] array;
     private Function<K, Integer> foh;
@@ -13,12 +12,12 @@ public class HashTable<K, V> implements HashTableInterface<K, V> {
     private static int numCollisions = 0;
     private static int numResizes = 0;
 
-    public HashTable() {
+    public HashTableLP() {
         array = new Node[INITIAL_TABLE_SIZE];
         foh = getHashingFunction();
     }
 
-    public HashTable(Function<K, Integer> f) {
+    public HashTableLP(Function<K, Integer> f) {
         array = new Node[INITIAL_TABLE_SIZE];
         foh = f;
     }
@@ -80,8 +79,7 @@ public class HashTable<K, V> implements HashTableInterface<K, V> {
         numResizes++;
         clear();
 
-        for (int i = 0; i < oldArray.length; i++) {
-            Node<K, V> node = oldArray[i];
+        for (Node<K, V> node : oldArray) {
             if (node != null) {
                 put(node.getKey(), node.getValue());
             }
@@ -132,7 +130,7 @@ public class HashTable<K, V> implements HashTableInterface<K, V> {
 
     public static void main(String[] args) {
 
-        HashTable<String, String> ht = new HashTable<>();
+        HashTableLP<String, String> ht = new HashTableLP<>();
         ht.put("banana", "yellow");
         ht.put("apple", "green");
         ht.put("android", "green");
@@ -151,13 +149,13 @@ public class HashTable<K, V> implements HashTableInterface<K, V> {
         String deletedKey = "apple";
         System.out.println(deletedKey + " : i -> " + ht.indexOf(deletedKey) + " -> " + ht.get(deletedKey));
 
-        System.out.println("----------- Delete -----------");
+        System.out.println("----------- Delete " + deletedKey +" -----------");
         ht.delete(deletedKey);
         ht.printGraph();
         ht.printStatus();
 
         // Testing
-        HashTable<String, String> table = new HashTable<>();
+        HashTableLP<String, String> table = new HashTableLP<>();
         for (int i = 0; i < 100000; i++) {
             table.put(HashTableInterface.randomString(), HashTableInterface.randomString());
         }

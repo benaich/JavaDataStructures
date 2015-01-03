@@ -11,13 +11,11 @@ public interface HashTableInterface<K, V> {
     public static final Random r = new Random();
     public static final String BLACK_CIRCLE = "\u25CF";
 
-    /* get the current load factor */
-    default float loadFactor() {
-        return getSize() / (float) getTableSize();
-    }
-
     /* get the position of key */
     int indexOf(K key);
+    
+    /* check whether the specified key exist in the hashtable */
+    boolean contains(K key);
 
     /* update or insert a new item to the hashtable */
     void put(K key, V val);
@@ -25,11 +23,8 @@ public interface HashTableInterface<K, V> {
     /* get the value of the key*/
     V get(K key);
 
-    /* remove key */
+    /* remove the specified item */
     void delete(K key);
-    
-    /* check whether the specified key exist in the hashtable */
-    boolean contains(K key);
 
     /* remove all data from the hashtable */
     void clear();
@@ -48,6 +43,11 @@ public interface HashTableInterface<K, V> {
 
     /* get the number of resizes */
     int getNumResizes();
+    
+    /* get the current load factor */
+    default float loadFactor() {
+        return getSize() / (float) getTableSize();
+    }
 
     /* print the table */
     void print();

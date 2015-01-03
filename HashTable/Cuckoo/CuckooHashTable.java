@@ -66,6 +66,12 @@ public class CuckooHashTable<K, V> implements HashTableInterface<K, V> {
         return -1;
     }
 
+    @Override
+    public boolean contains(K key) {
+        return indexOf(key) != -1;
+    }
+    
+    @Override
     public void put(K key, V val) {
         if (contains(key)) {
             return;
@@ -151,10 +157,6 @@ public class CuckooHashTable<K, V> implements HashTableInterface<K, V> {
         System.out.println("Numbre of rehashes : " + numRehashes);
     }
 
-    public boolean contains(K key) {
-        return indexOf(key) != -1;
-    }
-
     private void rehache(int newLength) {
         Node[][] oldArray = array;
         this.tableSize = HashTableInterface.nextPrime(newLength);
@@ -189,7 +191,6 @@ public class CuckooHashTable<K, V> implements HashTableInterface<K, V> {
         ht.put("dexter", "red");
 
         ht.print();
-        ht.printStatus();
 
         System.out.println("----------- Get -----------");
         String deletedKey = "apple";

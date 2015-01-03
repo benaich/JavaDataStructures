@@ -1,24 +1,24 @@
-package HashTable.LinearProbing;
+package HashTable.SeparateChaining;
 
 import HashTable.HashTableInterface;
 import java.util.function.Function;
 
-public class HashTableLP<K, V> implements HashTableInterface<K, V> {
+public class HashTableSC<K, V> implements HashTableInterface<K, V> {
 
     private Node[] array;
     private Function<K, Integer> foh;
     private int tableSize = INITIAL_TABLE_SIZE;
-    private int size;
+    private int size = 0;
     private int numCollisions = 0;
     private int numResizes = 0;
 
-    public HashTableLP() {
-        array = new Node[INITIAL_TABLE_SIZE];
+    public HashTableSC() {
+        array = new Node[tableSize];
         foh = getHashingFunction();
     }
 
-    public HashTableLP(Function<K, Integer> f) {
-        array = new Node[INITIAL_TABLE_SIZE];
+    public HashTableSC(Function<K, Integer> f) {
+        array = new Node[tableSize];
         foh = f;
     }
 
@@ -29,45 +29,64 @@ public class HashTableLP<K, V> implements HashTableInterface<K, V> {
     
     @Override
     public boolean contains(K key) {
-        return indexOf(key) != -1;
+        return array[indexOf(key)] != null;
     }
 
     @Override
     public void put(K key, V val) {
+        int index = indexOf(key);
+
         if (loadFactor() > LOAD_FACTOR) {
             resize();
         }
-        int index = indexOf(key);
-        int i = index;
-        while (array[i] != null && !array[i].getKey().equals(key)) {
-            i = (i + 1) % array.length;
+
+        Node<K, V> node = array[index];
+        while (node != null) {
+            if (node.getKey().equals(key)) {
+                node.setValue(val);
+                return;
+            }
+            node = node.getNext();
         }
-        if (i != index) {
+        if (array[index] != null) {
             numCollisions++;
         }
-        if (array[i] == null) {
-            size++;
-        }
-        array[i] = new Node(key, val);
+        array[index] = new Node(key, val, array[index]);
+        size++;
     }
 
     @Override
     public V get(K key) {
-        int i = indexOf(key);
-        while (array[i] != null && !array[i].getKey().equals(key)) {
-            i = (i + 1) % array.length;
+        int index = indexOf(key);
+        Node<K, V> node = array[index];
+        while (node != null) {
+            if (node.getKey().equals(key)) {
+                return node.getValue();
+            }
+            node = node.getNext();
         }
-        return (array[i] != null) ? (V) array[i].getValue() : null;
+        return null;
     }
 
     @Override
     public void delete(K key) {
-        int i = indexOf(key);
-        while (array[i] != null && !array[i].getKey().equals(key)) {
-            i = (i + 1) % array.length;
+        int index = indexOf(key);
+        if (array[index].getKey().equals(key)) {
+            array[index] = null;
+        } else {
+            delete(key, array[index], array[index].getNext());
         }
-        array[i] = null;
         size--;
+    }
+
+    public void delete(K key, Node p, Node node) {
+        if (node == null) {
+            return;
+        }
+        if (node.getKey().equals(key)) {
+            p.setNext(node.getNext());
+        }
+        delete(key, node, node.getNext());
     }
 
     @Override
@@ -85,8 +104,9 @@ public class HashTableLP<K, V> implements HashTableInterface<K, V> {
         clear();
 
         for (Node<K, V> node : oldArray) {
-            if (node != null) {
+            while (node != null) {
                 put(node.getKey(), node.getValue());
+                node = node.getNext();
             }
         }
     }
@@ -116,7 +136,11 @@ public class HashTableLP<K, V> implements HashTableInterface<K, V> {
         for (int i = 0; i < array.length; i++) {
             System.out.print(i + " -> ");
             if (array[i] != null) {
-                System.out.print(array[i] + " " + indexOf((K) array[i].getKey()));
+                Node node = array[i];
+                while (node != null) {
+                    System.out.print(" " + node);
+                    node = node.getNext();
+                }
             }
             System.out.println();
         }
@@ -124,10 +148,15 @@ public class HashTableLP<K, V> implements HashTableInterface<K, V> {
 
     @Override
     public void printGraph() {
+        System.out.println("----------- Print Graph-----------");
         for (int i = 0; i < array.length; i++) {
-            System.out.print(i + " -> ");
+            System.out.print(i + " | ");
             if (array[i] != null) {
-                System.out.print(indexOf((K) array[i].getKey()));
+                Node node = array[i];
+                while (node != null) {
+                    System.out.print(BLACK_CIRCLE);
+                    node = node.getNext();
+                }
             }
             System.out.println();
         }
@@ -135,32 +164,32 @@ public class HashTableLP<K, V> implements HashTableInterface<K, V> {
 
     public static void main(String[] args) {
 
-        HashTableLP<String, String> ht = new HashTableLP<>();
+        HashTableSC<String, String> ht = new HashTableSC<>();
         ht.put("banana", "yellow");
         ht.put("apple", "green");
         ht.put("android", "green");
         ht.put("cat", "white");
         ht.put("body", "black");
-        ht.put("glass", "red");
-        ht.put("jessy", "pinkman");
+        ht.put("class", "red");
+        ht.put("jesy", "pinkman");
         ht.put("walter", "white");
-        ht.put("arya", "startk");
-        ht.put("dexter", "red");
+        ht.put("arys", "startk");
+        ht.put("dextr", "red");
 
-        System.out.println("----------- Print -----------");
         ht.print();
 
         System.out.println("----------- Get -----------");
         String deletedKey = "apple";
         System.out.println(deletedKey + " : i -> " + ht.indexOf(deletedKey) + " -> " + ht.get(deletedKey));
 
-        System.out.println("----------- Delete " + deletedKey +" -----------");
+        System.out.println("----------- Delete " + deletedKey + " -----------");
         ht.delete(deletedKey);
+
         ht.printGraph();
         ht.printStatus();
-
+        
         // Testing
-        HashTableLP<String, String> table = new HashTableLP<>();
+        HashTableSC<String, String> table = new HashTableSC<>();
         for (int i = 0; i < 100000; i++) {
             table.put(HashTableInterface.randomString(), HashTableInterface.randomString());
         }

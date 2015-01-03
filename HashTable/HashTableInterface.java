@@ -9,6 +9,7 @@ public interface HashTableInterface<K, V> {
     public static final double LOAD_FACTOR = 0.5;
     public static final int BIGNUMBER = 9161;
     public static final Random r = new Random();
+    public static final String BLACK_CIRCLE = "\u25CF";
     
     default float loadFactor() {
         return getSize() / (float) getTableSize();

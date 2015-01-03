@@ -149,7 +149,7 @@ public class HashTableSC<K, V> implements HashTableInterface<K, V> {
             if (array[i] != null) {
                 Node node = array[i];
                 while (node != null) {
-                    System.out.print("#");
+                    System.out.print(BLACK_CIRCLE);
                     node = node.getNext();
                 }
             }

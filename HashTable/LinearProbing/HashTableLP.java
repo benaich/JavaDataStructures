@@ -9,8 +9,8 @@ public class HashTableLP<K, V> implements HashTableInterface<K, V> {
     private Function<K, Integer> foh;
     private int tableSize = INITIAL_TABLE_SIZE;
     private int size;
-    private static int numCollisions = 0;
-    private static int numResizes = 0;
+    private int numCollisions = 0;
+    private int numResizes = 0;
 
     public HashTableLP() {
         array = new Node[INITIAL_TABLE_SIZE];

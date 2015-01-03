@@ -151,7 +151,7 @@ public class CuckooHashTable<K, V> implements HashTableInterface<K, V> {
         System.out.println("Numbre of rehashes : " + numRehashes);
     }
 
-    private boolean contains(K key) {
+    public boolean contains(K key) {
         return indexOf(key) != -1;
     }
 

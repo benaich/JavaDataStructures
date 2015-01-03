@@ -26,6 +26,11 @@ public class HashTableSC<K, V> implements HashTableInterface<K, V> {
     public int indexOf(K key) {
         return foh.apply(key);
     }
+    
+    @Override
+    public boolean contains(K key) {
+        return indexOf(key) != -1;
+    }
 
     @Override
     public void put(K key, V val) {

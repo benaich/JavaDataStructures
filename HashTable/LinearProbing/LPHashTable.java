@@ -3,7 +3,7 @@ package HashTable.LinearProbing;
 import HashTable.HashTableInterface;
 import java.util.function.Function;
 
-public class HashTableLP<K, V> implements HashTableInterface<K, V> {
+public class LPHashTable<K, V> implements HashTableInterface<K, V> {
 
     private Node[] array;
     private Function<K, Integer> foh;
@@ -12,12 +12,12 @@ public class HashTableLP<K, V> implements HashTableInterface<K, V> {
     private int numCollisions = 0;
     private int numResizes = 0;
 
-    public HashTableLP() {
+    public LPHashTable() {
         array = new Node[INITIAL_TABLE_SIZE];
         foh = getHashingFunction();
     }
 
-    public HashTableLP(Function<K, Integer> f) {
+    public LPHashTable(Function<K, Integer> f) {
         array = new Node[INITIAL_TABLE_SIZE];
         foh = f;
     }
@@ -135,7 +135,7 @@ public class HashTableLP<K, V> implements HashTableInterface<K, V> {
 
     public static void main(String[] args) {
 
-        HashTableLP<String, String> ht = new HashTableLP<>();
+        LPHashTable<String, String> ht = new LPHashTable<>();
         ht.put("banana", "yellow");
         ht.put("apple", "green");
         ht.put("android", "green");
@@ -159,7 +159,7 @@ public class HashTableLP<K, V> implements HashTableInterface<K, V> {
         ht.printStatus();
 
         // Testing
-        HashTableLP<String, String> table = new HashTableLP<>();
+        LPHashTable<String, String> table = new LPHashTable<>();
         for (int i = 0; i < 100000; i++) {
             table.put(HashTableInterface.randomString(), HashTableInterface.randomString());
         }

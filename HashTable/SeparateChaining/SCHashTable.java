@@ -3,7 +3,7 @@ package HashTable.SeparateChaining;
 import HashTable.HashTableInterface;
 import java.util.function.Function;
 
-public class HashTableSC<K, V> implements HashTableInterface<K, V> {
+public class SCHashTable<K, V> implements HashTableInterface<K, V> {
 
     private Node[] array;
     private Function<K, Integer> foh;
@@ -12,12 +12,12 @@ public class HashTableSC<K, V> implements HashTableInterface<K, V> {
     private int numCollisions = 0;
     private int numResizes = 0;
 
-    public HashTableSC() {
+    public SCHashTable() {
         array = new Node[tableSize];
         foh = getHashingFunction();
     }
 
-    public HashTableSC(Function<K, Integer> f) {
+    public SCHashTable(Function<K, Integer> f) {
         array = new Node[tableSize];
         foh = f;
     }
@@ -164,7 +164,7 @@ public class HashTableSC<K, V> implements HashTableInterface<K, V> {
 
     public static void main(String[] args) {
 
-        HashTableSC<String, String> ht = new HashTableSC<>();
+        SCHashTable<String, String> ht = new SCHashTable<>();
         ht.put("banana", "yellow");
         ht.put("apple", "green");
         ht.put("android", "green");
@@ -189,7 +189,7 @@ public class HashTableSC<K, V> implements HashTableInterface<K, V> {
         ht.printStatus();
         
         // Testing
-        HashTableSC<String, String> table = new HashTableSC<>();
+        SCHashTable<String, String> table = new SCHashTable<>();
         for (int i = 0; i < 100000; i++) {
             table.put(HashTableInterface.randomString(), HashTableInterface.randomString());
         }

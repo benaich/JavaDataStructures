@@ -4,6 +4,8 @@ import HashTable.HashTableInterface;
 import java.util.function.Function;
 
 public class CuckooHashTable<K, V> implements HashTableInterface<K, V> {
+    /* How many times should we do the insert loop before rehaching */
+    private final static int MAX_INSERT_TRIES = 10;
 
     private Node[][] array;
     private Function<K, Integer>[] foh = new Function[2];
@@ -82,11 +84,12 @@ public class CuckooHashTable<K, V> implements HashTableInterface<K, V> {
         }
 
         Node<K, V> node = new Node<>(key, val, foh[0].apply(key), foh[1].apply(key));
-        put(node);
+        put(node, MAX_INSERT_TRIES);
         size++;
     }
 
-    public void put(Node<K, V> node) {
+    public void put(Node<K, V> node, int nuberOftries) {
+        if(nuberOftries==0)rehache(tableSize);
         int index = (node.getStatus()) ? 1 : 0;
         int hachCode = node.hachCode[index];
         Node<K, V> tmp = array[index][hachCode];
@@ -96,7 +99,7 @@ public class CuckooHashTable<K, V> implements HashTableInterface<K, V> {
         }
         numCollisions++;
         tmp.toggleStatus();
-        put(tmp);
+        put(tmp, nuberOftries-1);
     }
 
     @Override

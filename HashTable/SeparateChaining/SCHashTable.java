@@ -17,9 +17,9 @@ public class SCHashTable<K, V> implements HashTableInterface<K, V> {
         foh = getHashingFunction();
     }
 
-    public SCHashTable(Function<K, Integer> f) {
+    public SCHashTable(HASH_FUNCTION type) {
         array = new Node[tableSize];
-        foh = f;
+        foh = getHashingFunction(type);
     }
 
     @Override
@@ -175,6 +175,9 @@ public class SCHashTable<K, V> implements HashTableInterface<K, V> {
         ht.put("walter", "white");
         ht.put("arys", "startk");
         ht.put("dextr", "red");
+        ht.put("benaich", "white");
+        ht.put("med", "startk");
+        ht.put("real", "red");
 
         ht.print();
 
@@ -188,11 +191,20 @@ public class SCHashTable<K, V> implements HashTableInterface<K, V> {
         ht.printGraph();
         ht.printStatus();
         
-        // Testing
-        SCHashTable<String, String> table = new SCHashTable<>();
-        for (int i = 0; i < 100000; i++) {
+        // Testing Modulo
+        testing(HASH_FUNCTION.UNIVERSAL);
+        testing(HASH_FUNCTION.MULTIPLICATIF);
+        testing(HASH_FUNCTION.MODULO);
+    }    
+    
+    private static void testing(HASH_FUNCTION type) {
+        System.out.println("============ "+type+" ============");
+        SCHashTable<String, String> table = new SCHashTable<>(type);
+        for (int i = 0; i < 100; i++) {
             table.put(HashTableInterface.randomString(), HashTableInterface.randomString());
         }
         table.printStatus();
+        table.printGraph();
     }
+    
 }

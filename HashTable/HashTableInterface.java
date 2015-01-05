@@ -5,6 +5,10 @@ import java.util.function.Function;
 
 public interface HashTableInterface<K, V> {
 
+    public static enum HASH_FUNCTION {
+
+        UNIVERSAL, MODULO, MULTIPLICATIF
+    };
     public static final int INITIAL_TABLE_SIZE = 10;
     public static final double LOAD_FACTOR = 0.5;
     public static final int BIGNUMBER = 9161;
@@ -13,7 +17,7 @@ public interface HashTableInterface<K, V> {
 
     /* get the position of key */
     int indexOf(K key);
-    
+
     /* check whether the specified key exist in the hashtable */
     boolean contains(K key);
 
@@ -43,7 +47,7 @@ public interface HashTableInterface<K, V> {
 
     /* get the number of resizes */
     int getNumResizes();
-    
+
     /* get the current load factor */
     default float loadFactor() {
         return getSize() / (float) getTableSize();
@@ -65,13 +69,26 @@ public interface HashTableInterface<K, V> {
     }
 
     /* return a random universal hashing function */
-    default Function<K, Integer> getHashingFunction() {
-        int a, b, p;
-        a = r.nextInt();
-        b = r.nextInt();
-        p = HashTableInterface.nextPrime(BIGNUMBER);
-
-        return (x) -> Math.abs(((a * x.hashCode() + b * x.hashCode()) * p) % getTableSize());
+    default Function<K, Integer> getHashingFunction(){
+        return getHashingFunction(HASH_FUNCTION.UNIVERSAL);
+    }
+    default Function<K, Integer> getHashingFunction(HASH_FUNCTION type) {
+        Function<K, Integer> f;
+        if (type == HASH_FUNCTION.MODULO) {
+            f = x -> Math.abs(x.hashCode()) % getTableSize();
+        } else if (type == HASH_FUNCTION.UNIVERSAL) {
+            int a, b, p;
+            a = r.nextInt();
+            b = r.nextInt();
+            p = HashTableInterface.nextPrime(BIGNUMBER);
+            f = x -> Math.abs(((a * x.hashCode() + b) % p) % getTableSize());
+        } else {
+            f = x -> {
+                double c = 0.618;
+                return (int) Math.floor(((Math.abs(x.hashCode()) * c) % 1) * getTableSize());
+            };
+        }
+        return f;
     }
 
     /* get the next prime number after a*/

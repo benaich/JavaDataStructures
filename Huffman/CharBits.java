@@ -1,6 +1,6 @@
 package Huffman;
 
-import datastructures.ListModule.List;
+import List.ListModule.List;
 // this class is only used to return two value in the getChar method
 public class CharBits {
     public List<Integer> bits;

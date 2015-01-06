@@ -5,8 +5,8 @@
  */
 package Huffman;
 
-import datastructures.ListModule;
-import datastructures.ListModule.List;
+import List.ListModule;
+import List.ListModule.List;
 
 /**
  *

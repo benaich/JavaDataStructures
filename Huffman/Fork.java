@@ -2,8 +2,8 @@ package Huffman;
 
 import Heap.LeftistModule.Leftist;
 import Heap.LeftistModule;
-import datastructures.ListModule;
-import datastructures.ListModule.List;
+import List.ListModule;
+import List.ListModule.List;
 
 public class Fork implements CodeTree {
 

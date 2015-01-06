@@ -1,4 +1,4 @@
-package datastructures;
+package List;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -43,22 +43,27 @@ public class ListModule {
             this.tail = tail;
         }
 
+        @Override
         public String toString() {
             return head() + " " + tail();
         }
 
+        @Override
         public boolean isEmpty() {
             return false;
         }
 
+        @Override
         public T head() {
             return head;
         }
 
+        @Override
         public List<T> tail() {
             return tail;
         }
 
+        @Override
         public List<T> filter(Predicate<T> p) {
             if (p.test((T) head())) {
                 return list(head(), (List) tail().filter(p));
@@ -66,14 +71,17 @@ public class ListModule {
             return tail().filter(p);
         }
 
+        @Override
         public <R> List<R> map(Function<T, R> f) {
             return list(f.apply(head()), tail().map(f));
         }
 
+        @Override
         public <V> V reduce(V seed, BiFunction<V, T, V> f) {
             return tail().reduce(f.apply(seed, head()), f);
         }
 
+        @Override
         public void forEach(Consumer<T> f) {
             f.accept(head);
             tail().forEach(f);
@@ -89,18 +97,23 @@ public class ListModule {
 
     /* empty list class */
     public static final List<? extends Object> EMPTY = new List<Object>() {
+
+        @Override
         public String toString() {
             return "";
         }
 
+        @Override
         public boolean isEmpty() {
             return true;
         }
 
+        @Override
         public Object head() {
             throw new EmptyListHasNoHead();
         }
 
+        @Override
         public List tail() {
             throw new EmptyListHasNoTail();
         }
@@ -166,10 +179,10 @@ public class ListModule {
     // split a list
     public static <T> Paire<T> split(List<T> l) {
         if (l.tail().isEmpty()) {
-            return new Paire<T>(l, (List<T>) emptyList());
+            return new Paire<>(l, (List<T>) emptyList());
         }
         Paire<T> p = split(l.tail());
-        return new Paire<T>(list(l.head(), p.getSecond()), p.getFirst());
+        return new Paire<>(list(l.head(), p.getSecond()), p.getFirst());
     }
 
     // sort a list using merge sort 

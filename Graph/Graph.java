@@ -191,6 +191,7 @@ public class Graph {
         }
     }
 
+    /* testing */
     public static void main(String[] args) {
         File file = new File("src/Graph/data.txt");
         Graph g = new Graph(file);

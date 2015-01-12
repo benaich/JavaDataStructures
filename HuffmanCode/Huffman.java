@@ -119,7 +119,7 @@ public class Huffman{
 
     public void deserializeTree() {
         try {
-            aC = Node.deserialaze("src/data/tree");
+            aC = Node.deserialaze("src/HuffmanCode/data/tree");
         } catch (IOException ex) {
         }
     }
@@ -127,8 +127,8 @@ public class Huffman{
     public static void main(String[] args) {
         Huffman hf = new Huffman();
 
-        File in = new File("src/data/plain");
-        File out = new File("src/data/code");
+        File in = new File("src/HuffmanCode/data/plain");
+        File out = new File("src/HuffmanCode/data/code");
 
         hf.encodeMessage(in, out);
         //hf.decodeMessage(out, in);

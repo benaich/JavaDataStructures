@@ -200,11 +200,11 @@ public class SCHashTable<K, V> implements HashTableInterface<K, V> {
     private static void testing(HASH_FUNCTION type) {
         System.out.println("============ "+type+" ============");
         SCHashTable<String, String> table = new SCHashTable<>(type);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100000; i++) {
             table.put(HashTableInterface.randomString(), HashTableInterface.randomString());
         }
         table.printStatus();
-        table.printGraph();
+        //table.printGraph();
     }
     
 }

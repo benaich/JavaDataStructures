@@ -72,6 +72,7 @@ public interface HashTableInterface<K, V> {
     default Function<K, Integer> getHashingFunction(){
         return getHashingFunction(HASH_FUNCTION.UNIVERSAL);
     }
+    /* return a hashing function (modulo, universal or multiplicatif) */
     default Function<K, Integer> getHashingFunction(HASH_FUNCTION type) {
         Function<K, Integer> f;
         if (type == HASH_FUNCTION.MODULO) {

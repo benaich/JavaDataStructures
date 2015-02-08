@@ -1,10 +1,12 @@
-package Graph;
+package GraphAPI;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ public class Graph {
     boolean[] marked, color;
     int[] parent, id;
     boolean bipart = true, isCycle = false;
+    Stack<Integer> reverseOrder;
 
     public Graph(int n) {
         this.v = n;
@@ -25,35 +28,46 @@ public class Graph {
             adj[i] = new LinkedList<>();
         }
     }
-
+    
+    /* constructor from a file */ 
     public Graph(File file) {
-        //don't the number of line in this file :(
-        this(10);
         BufferedReader reader;
-
         try {
             reader = new BufferedReader(new FileReader(file));
-            //this((int)reader.lines().count());
-            reader.lines().forEach(x->{
-                String[] parts = x.split("\\s");
-                for (int i = 1; i < parts.length; i++) {
-                    int index = Integer.parseInt(parts[0]);
-                    adj[index].add(Integer.parseInt(parts[i]));
-                }
-            });
+            String line;
+            v = Integer.parseInt(reader.readLine()); //number of elements (1st line)
+            e = Integer.parseInt(reader.readLine()); //number of edges (2nd line)
+
+            adj = new List[v];
+            for (int i = 0; i < v; i++) {
+                adj[i] = new LinkedList<>();
+            }
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\s");
+                int from = Integer.parseInt(parts[0]);
+                int to = Integer.parseInt(parts[1]);
+                adj[from].add(to);
+            }
             reader.close();
-            v = adj.length;
 
         } catch (IOException ex) {
         }
     }
-
+    
+    /* add edge for directed graph */
+    public void addEdge(int v, int w)
+    {
+        adj[v].add(w);
+    }
+    
     public void init() {
         parent = new int[v];
         id = new int[v];
         marked = new boolean[v];
         color = new boolean[v];
         connex = 0;
+        reverseOrder = new Stack<>();
     }
 
     /* Depth-First Search */
@@ -71,6 +85,7 @@ public class Graph {
                 isCycle = true;
             }
         });
+        if(!adj[s].isEmpty())reverseOrder.push(s);
     }
 
     /* start a Depth-First Search */
@@ -112,8 +127,8 @@ public class Graph {
     /* count numbre of connexe */
     public void countConnexe() {
         for (int i = 0; i < v; i++) {
-            if (!marked[v]) {
-                dfs(v);
+            if (!marked[i]) {
+                dfs(i);
                 connex++;
             }
         }
@@ -182,6 +197,14 @@ public class Graph {
         }
     }
     
+    public Stack<Integer> topologicalOrder(){
+        init();
+        for (int i = 0; i < v; i++) {
+            if(!marked[i]) dfs(i);
+        }
+        return reverseOrder;
+    }
+    
     /* print the graph (obviously) */
     public void print(){
         for (int i = 0; i < v; i++) {
@@ -193,7 +216,7 @@ public class Graph {
 
     /* testing */
     public static void main(String[] args) {
-        File file = new File("src/Graph/data.txt");
+        File file = new File("src/GraphAPI/data.txt");
         Graph g = new Graph(file);
         
         System.out.println("------- Graph -------");
@@ -217,6 +240,13 @@ public class Graph {
         System.out.println("------- countConnex -------");
         g.countConnexe();
         System.out.println(g.connex);
+        
+        System.out.println("------- topologicalOrder -------");
+        Stack<Integer> path = g.topologicalOrder();
+        while (!path.isEmpty()) {            
+            System.out.print(path.pop() + " -> ");
+        }
+        System.out.println("");
         
 
     }

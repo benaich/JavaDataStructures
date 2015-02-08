@@ -130,7 +130,7 @@ public class ListModule {
     }
 
     public static <T> List<T> list(T head) {
-        return new NonEmptyList<>(head, emptyList());
+        return list(head, emptyList());
     }
 
     public static <T> List<T> list(T... array) {
@@ -185,17 +185,16 @@ public class ListModule {
         return new Paire<>(list(l.head(), p.getSecond()), p.getFirst());
     }
 
-    // sort a list using merge sort 
+    /* sort a list using merge sort */
     public static <T extends Comparable<? super T>> List<T> mergeSort(List<T> l) {
         if (l.isEmpty() || l.tail().isEmpty()) {
             return l;
         }
         Paire<T> p = split(l);
         return merge(mergeSort(p.getFirst()), mergeSort(p.getSecond()));
-
     }
 
-    // Returns true if a list contains the specified element.
+    /* Returns true if a list contains the specified element */
     public static <T> boolean contain(T data, List<T> l) {
         if (l.isEmpty()) {
             return false;
@@ -272,7 +271,8 @@ public class ListModule {
 
     public static void main(String[] args) {
 
-        List<Integer> l1 = list(1, list(5, list(2, list(8, list(2, emptyList())))));
+        //List<Integer> l1 = list(1, list(5, list(2, list(8, list(2, emptyList())))));
+        List<Integer> l1 = list(2,8,2,5,1);
 
         System.out.println("--- test1: list ---");
         System.out.println(l1);

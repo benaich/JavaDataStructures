@@ -1,6 +1,7 @@
 package HashTable.SeparateChaining;
 
 import HashTable.HashTableInterface;
+import java.io.File;
 import java.util.function.Function;
 
 public class SCHashTable<K, V> implements HashTableInterface<K, V> {
@@ -26,7 +27,7 @@ public class SCHashTable<K, V> implements HashTableInterface<K, V> {
     public int indexOf(K key) {
         return foh.apply(key);
     }
-    
+
     @Override
     public boolean contains(K key) {
         return array[indexOf(key)] != null;
@@ -36,7 +37,7 @@ public class SCHashTable<K, V> implements HashTableInterface<K, V> {
     public void put(K key, V val) {
         int index = indexOf(key);
 
-        if (loadFactor() > LOAD_FACTOR) {
+        if (loadFactor() > LOAD_FACTOR && getTableSize() * 2 < MAX_TABLE_SIZE) {
             resize();
         }
 
@@ -102,7 +103,6 @@ public class SCHashTable<K, V> implements HashTableInterface<K, V> {
         tableSize = tableSize * 2;
         numResizes++;
         clear();
-
         for (Node<K, V> node : oldArray) {
             while (node != null) {
                 put(node.getKey(), node.getValue());
@@ -162,49 +162,44 @@ public class SCHashTable<K, V> implements HashTableInterface<K, V> {
         }
     }
 
-    public static void main(String[] args) {
-
-        SCHashTable<String, String> ht = new SCHashTable<>();
-        ht.put("banana", "yellow");
-        ht.put("apple", "green");
-        ht.put("android", "green");
-        ht.put("cat", "white");
-        ht.put("body", "black");
-        ht.put("class", "red");
-        ht.put("jesy", "pinkman");
-        ht.put("walter", "white");
-        ht.put("arys", "startk");
-        ht.put("dextr", "red");
-        ht.put("benaich", "white");
-        ht.put("med", "startk");
-        ht.put("real", "red");
-
-        ht.print();
-
-        System.out.println("----------- Get -----------");
-        String deletedKey = "apple";
-        System.out.println(deletedKey + " : i -> " + ht.indexOf(deletedKey) + " -> " + ht.get(deletedKey));
-
-        System.out.println("----------- Delete " + deletedKey + " -----------");
-        ht.delete(deletedKey);
-
-        ht.printGraph();
-        ht.printStatus();
+    @Override
+    public double getDistribution() {
+        int[] tab = new int[getTableSize()];
         
-        // Testing Modulo
-        testing(HASH_FUNCTION.UNIVERSAL);
-        testing(HASH_FUNCTION.MULTIPLICATIF);
-        testing(HASH_FUNCTION.MODULO);
-    }    
+        for (int i = 0; i < getTableSize(); i++) {
+            Node node = array[i];
+            while (node != null) {
+                tab[i]++;
+                node = node.getNext();
+            }
+        }
+        
+        return HashTableInterface.getStdDeviation(tab);
+    }
     
     private static void testing(HASH_FUNCTION type) {
-        System.out.println("============ "+type+" ============");
+        System.out.println("------------------ " + type + " ------------------");
         SCHashTable<String, String> table = new SCHashTable<>(type);
         for (int i = 0; i < 100000; i++) {
             table.put(HashTableInterface.randomString(), HashTableInterface.randomString());
+            if(i==100 || i==500 || i==1000 || i==2000 || i==5000 || i==10000 || i==50000 || i== 80000 || i==100000)
+                table.printStatus();
         }
-        table.printStatus();
-        //table.printGraph();
+        
     }
     
+    public static void main(String[] args) {
+        /*
+        SCHashTable<String, String> ht = new SCHashTable<>(HASH_FUNCTION.UNIVERSAL);
+        File file = new File("src/HashTable/data.txt");
+        HashTableInterface.importFromFile(file, ht);
+        ht.printStatus();
+                */
+        
+        
+        testing(HASH_FUNCTION.UNIVERSAL);
+        testing(HASH_FUNCTION.MULTIPLICATIF);
+        testing(HASH_FUNCTION.MODULO);
+    }
+
 }

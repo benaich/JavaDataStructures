@@ -1,6 +1,7 @@
 package HashTable.LinearProbing;
 
 import HashTable.HashTableInterface;
+import java.io.File;
 import java.util.function.Function;
 
 public class LPHashTable<K, V> implements HashTableInterface<K, V> {
@@ -110,6 +111,9 @@ public class LPHashTable<K, V> implements HashTableInterface<K, V> {
     public int getNumResizes() {
         return numResizes;
     }
+    
+    @Override
+    public double getDistribution(){return 0;};
 
     @Override
     public void print() {
@@ -136,17 +140,8 @@ public class LPHashTable<K, V> implements HashTableInterface<K, V> {
     public static void main(String[] args) {
 
         LPHashTable<String, String> ht = new LPHashTable<>();
-        ht.put("banana", "yellow");
-        ht.put("apple", "green");
-        ht.put("android", "green");
-        ht.put("cat", "white");
-        ht.put("body", "black");
-        ht.put("glass", "red");
-        ht.put("jessy", "pinkman");
-        ht.put("walter", "white");
-        ht.put("arya", "startk");
-        ht.put("dexter", "red");
-
+        File file = new File("src/HashTable/data.txt");
+        HashTableInterface.importFromFile(file, ht);
         ht.print();
 
         System.out.println("----------- Get -----------");
@@ -155,6 +150,7 @@ public class LPHashTable<K, V> implements HashTableInterface<K, V> {
 
         System.out.println("----------- Delete " + deletedKey +" -----------");
         ht.delete(deletedKey);
+        
         ht.printGraph();
         ht.printStatus();
 

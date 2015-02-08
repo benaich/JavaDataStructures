@@ -52,6 +52,9 @@ public class CuckooHashTable<K, V> implements HashTableInterface<K, V> {
     public int getNumResizes() {
         return numResizes;
     }
+    
+    @Override
+    public double getDistribution(){return 0;};
 
     @Override
     public int indexOf(K key) {

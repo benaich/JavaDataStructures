@@ -8,7 +8,6 @@ public class LCS {
     };
 
     public class Paire {
-
         public int cal;
         public Direction d;
 
@@ -110,11 +109,12 @@ public class LCS {
         return text[max];
     }
     public static void main(String[] args) {
+        
         System.out.println(LCS.run("abcdbdab","bdcaba" ));
         
         String dbText[] = new String[]{"house of cards", "game of throne", "breaking bad"};
         
-        System.out.println("Do you mean " + LCS.doYouMean("gamz of trone", dbText));
+        System.out.println("Do you mean " + LCS.doYouMean("ga of Zrone", dbText));
     }
 
 }

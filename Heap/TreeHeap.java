@@ -46,8 +46,9 @@ public class TreeHeap {
             }
             if (!isLeaf()) {
                 Node<T> min;
-                if(right == null) min = left;
-                else{
+                if (right == null) {
+                    min = left;
+                } else {
                     min = (left.data.compareTo(right.data) < 0) ? left : right;
                 }
                 if (min.data.compareTo(data) < 0) {
@@ -148,38 +149,40 @@ public class TreeHeap {
     }
 
     public static void main(String[] args) {
-        Node<Integer> heap1, heap2, heap3, heap4;
+        Node<Integer> heap1, heap2, heap3, heap4, heap5;
 
-        /*heap1 = insert(3, 1, 9, 10);
-         System.out.println("------------ heap1 ------------");
-         printNice(heap1, 1);
-
-         heap2 = insert(4, 8, 5, 6, 11);
-         System.out.println("------------ heap2 ------------");
-         printNice(heap2, 1);
-
-         heap3 = merge(heap1, heap2);
-         System.out.println("------------ heap3 = heap1 + heap2 ------------");
-         printNice(heap3, 1);
-
-         System.out.println("------------- Min(heap3)  ------------");
-         System.out.println(min(heap3));
-        
-         heap3 = delete(heap3);
-         System.out.println("------------ deleter(heap3) ------------");
-         printNice(heap3, 1);
-        
-         heap4 = insert(3, 1, 9, 10,1);
-         System.out.println("------------ heap4 ------------");
-         printNice(heap4, 1);
-         heap4 = delete(heap4, 1);
-         System.out.println("------------ delete(heap4, 1) ------------");
-         printNice(heap4, 1);*/
-        heap1 = insert(5);
-        heap1.insertSorted(7);
-        heap1.insertSorted(10);
-        heap1.insertSorted(1);
-        heap1.insertSorted(2);
+        heap1 = insert(3, 1, 9, 10);
+        System.out.println("------------ heap1 ------------");
         printNice(heap1, 1);
+
+        heap2 = insert(4, 8, 5, 6, 11);
+        System.out.println("------------ heap2 ------------");
+        printNice(heap2, 1);
+
+        heap3 = merge(heap1, heap2);
+        System.out.println("------------ heap3 = heap1 + heap2 ------------");
+        printNice(heap3, 1);
+
+        System.out.println("------------- Min(heap3)  ------------");
+        System.out.println(min(heap3));
+
+        heap3 = delete(heap3);
+        System.out.println("------------ deleter(heap3) ------------");
+        printNice(heap3, 1);
+
+        heap4 = insert(3, 1, 9, 10, 1);
+        System.out.println("------------ heap4 ------------");
+        printNice(heap4, 1);
+        heap4 = delete(heap4, 1);
+        System.out.println("------------ delete(heap4, 1) ------------");
+        printNice(heap4, 1);
+        
+        System.out.println("------------ heap5 ------------");
+        heap5 = insert(5);
+        heap5.insertSorted(7);
+        heap5.insertSorted(10);
+        heap5.insertSorted(1);
+        heap5.insertSorted(2);
+        printNice(heap5, 1);
     }
 }

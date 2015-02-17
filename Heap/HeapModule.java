@@ -3,15 +3,14 @@ package Heap;
 public class HeapModule {
 
     public static interface Heap<T> {
-
         Heap left();
         Heap right();
         T data();
         int rank();
         boolean isEmpty();
+        int size();
         @Override
         String toString();
-        int size();
     }
 
     public static class NonEmptyHeap<T> implements Heap<T> {
@@ -32,26 +31,32 @@ public class HeapModule {
             right = b;
         }
 
+        @Override
         public Heap left() {
             return left;
         }
 
+        @Override
         public Heap right() {
             return right;
         }
 
+        @Override
         public T data() {
             return data;
         }
 
+        @Override
         public int rank() {
             return rank;
         }
 
+        @Override
         public boolean isEmpty() {
             return false;
         }
         
+        @Override
         public int size(){
             return 1 + left.size() + right.size();
         }
@@ -59,38 +64,48 @@ public class HeapModule {
 
     public static final Heap<? extends Object> EMPTY = new Heap<Object>() {
 
+        @Override
         public Heap left() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Heap right() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Object data() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int rank() {
             return 0;
         }
 
+        @Override
         public String toString() {
             return "";
         }
 
+        @Override
         public boolean isEmpty() {
             return true;
         }
+        
+        @Override
         public int size(){
             return 0;
         }
     };
 
+    /* retourn EMPTY instnace (singleton pattern) */
     public static <T> Heap<T> emptyHeap() {
         return (Heap) EMPTY;
     }
-
+    
+    /* build a heap v1 */
     public static <T extends Comparable<? super T>> Heap<T> heap(T x, Heap<T> a, Heap<T> b) {
         if (a.rank() > b.rank()) {
             return new NonEmptyHeap<>(b.rank() + 1, x, a, b);
@@ -98,10 +113,12 @@ public class HeapModule {
         return new NonEmptyHeap<>(a.rank() + 1, x, b, a);
     }
 
+    /* build a heap v2 */
     public static <T extends Comparable<? super T>> Heap<T> heap(T x) {
         return heap(x, emptyHeap(), emptyHeap());
     }
 
+    /* insert an element into a heap */
     public static <T extends Comparable<? super T>> Heap<T> insert(Heap<T> a, T x) {
         if (a.isEmpty()) {
             return heap(x);
@@ -112,7 +129,8 @@ public class HeapModule {
             return heap(x, a.left(), insert(a.right(), a.data()));
         }
     }
-
+    
+    /* create a balanced heap from an array */
     public static <T extends Comparable<? super T>> Heap<T> insert(T... array) {
         Heap<T> root = emptyHeap();
         for (T item : array) {
@@ -120,30 +138,9 @@ public class HeapModule {
         }
         return root;
     }
-
-    public static <T extends Comparable<? super T>> Heap<T> leftList(T... array) {
-        Heap<T> root = emptyHeap();
-        for (T item : array) {
-            root = merge(root, heap(item));
-        }
-        return root;
-    }
-
-    public static <T extends Comparable<? super T>> Heap<T> merge(Heap<T> a, Heap<T> b) {
-        if (a.isEmpty()) {
-            return b;
-        }
-        if (b.isEmpty()) {
-            return a;
-        }
-
-        if (a.data().compareTo(b.data()) <= 0) {
-            return heap(a.data(), a.left(), merge(a.right(), b));
-        }
-        return heap(b.data(), b.left(), merge(a, b.right()));
-    }
     
-    public static <T extends Comparable<? super T>> Heap<T> simpleMerge(Heap<T> a, Heap<T> b) {
+    /* merge two balanced heaps into one balanced heap*/
+    public static <T extends Comparable<? super T>> Heap<T> merge(Heap<T> a, Heap<T> b) {
         if (a.isEmpty()) {
             return b;
         }
@@ -157,6 +154,7 @@ public class HeapModule {
         return heap(b.data(), merge(a.data(), b.left(), b.right()), merge(a.left(), a.right()));
     }
     
+    /* merge a key + two balanced heaps into one balanced heap*/
     public static <T extends Comparable<? super T>> Heap<T> merge(T x, Heap<T> a, Heap<T> b) {
         if (a.isEmpty()) {
             return insert(a, x);
@@ -168,12 +166,13 @@ public class HeapModule {
         if ((x.compareTo(a.data()) <= 0) && (x.compareTo(b.data()) <= 0)) {
             return heap(x, a, b);
         }
-        if ((a.data().compareTo(b.data()) <= 0) && (a.data().compareTo(x) <= 0)) {
+        if (a.data().compareTo(b.data()) <= 0) {
             return heap(a.data(), merge(x, a.left(), a.right()), b);
         }
         return heap(b.data(), merge(x, b.left(), b.right()), a);
     }
     
+    /* return the minimum key of a heap */
     public static <T extends Comparable<? super T>> T min(Heap<T> root) {
         if (root == null) {
             return null;
@@ -181,6 +180,7 @@ public class HeapModule {
         return  root.data();
     }
     
+    /* remove the minimum key of a heap */
     public static <T extends Comparable<? super T>> Heap<T> delete(Heap<T> root) {
         if (root == null) {
             return null;
@@ -188,6 +188,7 @@ public class HeapModule {
         return merge(root.left(), root.right());
     }
 
+    /* print heap element */
     public static <T> void printNice(Heap<T> root, int level) {
         if (root.isEmpty()) {
             return;
@@ -207,14 +208,12 @@ public class HeapModule {
     public static void main(String[] args) {
 
         Heap<Integer> heap1 = insert(5, 9, 3);
-        System.out.println("------------ Balanced Heap ------------");
+        System.out.println("------------ Balanced Heap 1 ------------");
         printNice(heap1, 1);
         Heap<Integer> heap3 = insert(1, 8, 2);
-        System.out.println("------------ Balanced Heap ------------");
+        System.out.println("------------ Balanced Heap 2 ------------");
         printNice(heap3, 1);
-        printNice(simpleMerge(heap1, heap3), 1);
-        Heap<Integer> heap2 = leftList(5, 9, 3, 1, 2, 15, 22);
-        System.out.println("------------ LeftList Heap ------------");
-        printNice(heap2, 1);
+        System.out.println("------------ Merge Heap 1 & Heap 2 ------------");
+        printNice(merge(heap1, heap3), 1);
     }
 }

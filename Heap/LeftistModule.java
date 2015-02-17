@@ -53,26 +53,32 @@ public class LeftistModule {
             right = b;
         }
 
+        @Override
         public Leftist left() {
             return left;
         }
 
+        @Override
         public Leftist right() {
             return right;
         }
 
+        @Override
         public T data() {
             return data;
         }
 
+        @Override
         public int rank() {
             return rank;
         }
 
+        @Override
         public boolean isEmpty() {
             return false;
         }
 
+        @Override
         public int size() {
             return 1 + left.size() + right.size();
         }
@@ -101,30 +107,37 @@ public class LeftistModule {
 
         static protected final Empty empty = new Empty();
 
+        @Override
         public Leftist left() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public Leftist right() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public T data() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int rank() {
             return 0;
         }
 
+        @Override
         public String toString() {
             return "";
         }
 
+        @Override
         public boolean isEmpty() {
             return true;
         }
 
+        @Override
         public int size() {
             return 0;
         }
@@ -143,10 +156,12 @@ public class LeftistModule {
         }
     };
 
+    /* retourn EMPTY instnace (singleton pattern) */
     public static <T extends Comparable<? super T>> Leftist<T> emptyLeftist() {
         return (Leftist) Empty.empty;
     }
 
+    /* build a leftist heap v1 */
     public static <T extends Comparable<? super T>> Leftist<T> heap(T x, Leftist<T> a, Leftist<T> b) {
         if (a.rank() > b.rank()) {
             return new NonEmptyLeftist<>(b.rank() + 1, x, a, b);
@@ -154,14 +169,17 @@ public class LeftistModule {
         return new NonEmptyLeftist<>(a.rank() + 1, x, b, a);
     }
 
+    /* build a leftist heap v2 */
     public static <T extends Comparable<? super T>> Leftist<T> heap(T x) {
         return heap(x, emptyLeftist(), emptyLeftist());
     }
-
+    
+    /* used by HuffmanFunctionalProgramming package */
     public static <T extends Comparable<? super T>> Leftist<T> insert(Leftist<T> p, T val) {
         return p.insert(val);
     }
 
+    /* print heap element */
     public static <T extends Comparable<? super T>> void printNice(Leftist<T> root, int level) {
         if (root.isEmpty()) {
             return;
@@ -180,12 +198,24 @@ public class LeftistModule {
 
     public static void main(String[] args) {
 
-        Leftist<Integer> p = emptyLeftist();
-        p = p.insert(2, 3, 4, 1, 2);
-//        p = insert(emptyLeftist(), 2);
-        printNice(p, 1);
-        System.out.println("-------------");
-        p = p.delete();
-        printNice(p, 1);
+        Leftist<Integer> p1 = emptyLeftist();
+        Leftist<Integer> p2 = emptyLeftist();
+        
+        p1 = p1.insert(2, 3, 4, 1, 2);
+        System.out.println("----------- Leftits Heap 1 -----------");
+        printNice(p1, 1);
+        System.out.println("----------- delete -----------");
+        p1 = p1.delete();
+        printNice(p1, 1);
+        
+        p2 = p2.insert(5, 9, 3, 1, 2, 15, 22);
+        System.out.println("----------- Leftits Heap 1 -----------");
+        printNice(p2, 1);
+        
+        Leftist<Integer> p3 = p1.merge(p2);
+        System.out.println("----------- merge Heap 1 & Heap 2 -----------");
+        printNice(p3, 1);
+        
+        
     }
 }

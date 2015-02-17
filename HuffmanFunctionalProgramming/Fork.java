@@ -41,7 +41,7 @@ public class Fork implements CodeTree {
 
     @Override
     public List<Integer> getCode(Character car, List<Integer> acc) {
-        if (ListModule.contain(car, left.paire().getChars())) {
+        if (left.paire().getChars().contains(car)) {
             return ListModule.list(0, left.getCode(car, acc));
         }
         return ListModule.list(1, right.getCode(car, acc));

@@ -15,6 +15,8 @@ public class ListModule {
 
         boolean isEmpty();
 
+        boolean contains(T data);
+
         default List<T> filter(Predicate<T> p) {
             return emptyList();
         }
@@ -61,6 +63,14 @@ public class ListModule {
         @Override
         public List<T> tail() {
             return tail;
+        }
+
+        @Override
+        public boolean contains(T data) {
+            if (head().equals(data)) {
+                return true;
+            }
+            return tail().contains(data);
         }
 
         @Override
@@ -116,6 +126,11 @@ public class ListModule {
         @Override
         public List tail() {
             throw new EmptyListHasNoTail();
+        }
+
+        @Override
+        public boolean contains(Object data){
+            return false;
         }
     };
 
@@ -194,17 +209,6 @@ public class ListModule {
         return merge(mergeSort(p.getFirst()), mergeSort(p.getSecond()));
     }
 
-    /* Returns true if a list contains the specified element */
-    public static <T> boolean contain(T data, List<T> l) {
-        if (l.isEmpty()) {
-            return false;
-        }
-        if (l.head().equals(data)) {
-            return true;
-        }
-        return contain(data, l.tail());
-    }
-
     /* concatenate two lists */
     public static <T> List<T> concat(List<T> l1, List<T> l2) {
         if (l1.isEmpty()) {
@@ -235,7 +239,7 @@ public class ListModule {
         if (l.isEmpty()) {
             return l;
         }
-        if (!contain(l.head(), l.tail())) {
+        if (!l.tail().contains(l.head())) {
             return list(l.head(), unique(l.tail()));
         }
         return unique(l.tail());

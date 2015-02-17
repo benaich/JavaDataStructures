@@ -1,4 +1,4 @@
-package Huffman;
+package HuffmanFunctionalProgramming;
 
 import List.ListModule.List;
 // this class is only used to return two value in the getChar method

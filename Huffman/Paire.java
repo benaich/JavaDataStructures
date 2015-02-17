@@ -1,25 +1,15 @@
 package Huffman;
 
-import List.ListModule;
-import List.ListModule.List;
 import java.io.Serializable;
 
 public class Paire implements Comparable<Paire>, Serializable {
 
-    private int fr;
-    private List<Character> chars;
+    int fr;
+    int car;
 
-    public Paire(int fr, List<Character> chars) {
+    public Paire(int fr, int car) {
         this.fr = fr;
-        this.chars = chars;
-    }
-
-    public int getFr() {
-        return fr;
-    }
-
-    public List<Character> getChars() {
-        return chars;
+        this.car = car;
     }
 
     public Paire(int fr) {
@@ -37,12 +27,7 @@ public class Paire implements Comparable<Paire>, Serializable {
 
     @Override
     public String toString() {
-        return "("+chars+fr+")";
+        return car+"("+fr+")";
     }
-    
-    public static Paire merge(Paire a, Paire b){
-        return new Paire(a.getFr()+b.getFr(), ListModule.merge(a.getChars(), b.getChars()));
-    }
-    
     
 }

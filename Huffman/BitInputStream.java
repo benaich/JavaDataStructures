@@ -1,8 +1,9 @@
-package HuffmanCode;
+package Huffman;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+/* BitInputStream using decorator pattern */
 public final class BitInputStream {
 	private InputStream input;
 	private int nextBits;

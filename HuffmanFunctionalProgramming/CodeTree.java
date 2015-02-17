@@ -1,4 +1,4 @@
-package Huffman;
+package HuffmanFunctionalProgramming;
 
 import List.ListModule;
 import List.ListModule.List;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Huffman;
+package HuffmanFunctionalProgramming;
 
 import List.ListModule;
 import List.ListModule.List;

@@ -1,4 +1,4 @@
-package Huffman;
+package HuffmanFunctionalProgramming;
 
 import Heap.LeftistModule.Leftist;
 import Heap.LeftistModule;

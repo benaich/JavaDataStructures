@@ -187,19 +187,30 @@ public class SCHashTable<K, V> implements HashTableInterface<K, V> {
         }
         
     }
-    
-    public static void main(String[] args) {
-        /*
-        SCHashTable<String, String> ht = new SCHashTable<>(HASH_FUNCTION.UNIVERSAL);
-        File file = new File("src/HashTable/data.txt");
+    private static void testing(HASH_FUNCTION type, File file) {
+        System.out.println("------------------ " + type + " ------------------");
+        SCHashTable<String, String> ht = new SCHashTable<>(type);
         HashTableInterface.importFromFile(file, ht);
         ht.printStatus();
-                */
+    }
+    
+    
+    
+    public static void main(String[] args) {
         
+        // testing using values from a file 
+        File file = new File("src/HashTable/data.txt");
+        testing(HASH_FUNCTION.UNIVERSAL, file);
+        testing(HASH_FUNCTION.MULTIPLICATIF, file);
+        testing(HASH_FUNCTION.MODULO, file);
+                
         
+        // testing using random values 
+        /*
         testing(HASH_FUNCTION.UNIVERSAL);
         testing(HASH_FUNCTION.MULTIPLICATIF);
         testing(HASH_FUNCTION.MODULO);
+        */
     }
 
 }

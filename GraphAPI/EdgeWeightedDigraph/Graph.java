@@ -25,6 +25,7 @@ public class Graph {
             adj[i] = new LinkedList<>();
         }
     }
+    
     /* constructor from a file */ 
     public Graph(File file) {
         BufferedReader reader;

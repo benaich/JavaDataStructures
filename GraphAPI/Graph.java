@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +83,8 @@ public class Graph {
                 isCycle = true;
             }
         });
-        if(!adj[s].isEmpty())reverseOrder.push(s);
+        if(!adj[s].isEmpty())
+            reverseOrder.push(s);
     }
 
     /* start a Depth-First Search */

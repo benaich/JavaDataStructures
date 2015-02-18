@@ -23,8 +23,8 @@ public class LLRB<T extends Comparable<? super T>> {
             return build(right.key, build(key, left, right.left, RED), right.right, color);
         }
 
-        public Node rotateRihgt() {
-            return build(left.key, left.left, build(key, right, left.right, RED), color);
+        public Node rotateRight() {
+            return build(left.key, left.left, build(key, left.right, right, RED), color);
         }
 
         public void sand() {
@@ -38,7 +38,7 @@ public class LLRB<T extends Comparable<? super T>> {
                 return rotateLeft().balance();
             }
             if (isRed(left) && isRed(left.left)) {
-                return rotateRihgt();
+                return rotateRight();
             }
             return this;
         }
@@ -99,6 +99,8 @@ public class LLRB<T extends Comparable<? super T>> {
         root = app.put(root, 3);
         root = app.put(root, 5);
         root = app.put(root, 6);
+        root = app.put(root, 8);
+        root = app.put(root, 9);
         app.printNice(root, 1);
 
     }

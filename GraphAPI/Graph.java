@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,7 @@ public class Graph {
             } else if (color[x] = color[s]) {
                 bipart = false;
             } else {
+                //not working need dfs(s, origin)
                 isCycle = true;
             }
         });
@@ -100,17 +102,19 @@ public class Graph {
     }
 
     /* get a path between a and b */
-    public List<Integer> getPath(int a, int b) {
-        if (!pathExist(a, b)) {
-            return null;
-        }
-        List<Integer> list = new Stack();
+    public Stack<Integer> getPath(int a, int b)
+    {
+        if (!pathExist(a, b)) return null;
+        Stack<Integer> path = new Stack<>();
+        
         while (a != b) {
-            list.add(b);
+            path.push(b);
             b = parent[b];
         }
-        return list;
+        path.push(a);
+        return path;
     }
+
 
     /* check if all element of the graph are connected */
     public boolean isConnexe() {
@@ -226,10 +230,22 @@ public class Graph {
             System.out.println("yes");
         else System.out.println("no");
         
-        System.out.println("------- pathExist -------");
-        if(g.pathExist(1 , 0))
+        System.out.println("------- pathExist(0, 4) -------");
+        if(g.pathExist(0, 4))
             System.out.println("yes");
         else System.out.println("no");
+
+        System.out.println("------- pathExist(3, 0) -------");
+        if(g.pathExist(3, 0))
+            System.out.println("yes");
+        else System.out.println("no");
+
+        System.out.println("------- path(3, 0) -------");
+        Stack<Integer> path1 = g.getPath(3,0);
+        while (!path1.isEmpty()) {            
+            System.out.print(path1.pop() + " -> ");
+        }
+        System.out.println("");
         
         System.out.println("------- isConnexe -------");
         if(g.isConnexe())

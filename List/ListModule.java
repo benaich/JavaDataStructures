@@ -252,8 +252,10 @@ public class ListModule {
         List<T> inf = l.tail().filter((x) -> c.compare(x, l.head()) < 0);
         List<T> sup = l.tail().filter((x) -> c.compare(x, l.head()) > 0);
         List<T> rest = l.tail().filter((x) -> c.compare(x, l.head()) == 0);
-        return concat(concat(qSort(inf, c), list(l.head(), emptyList())),
-                concat(qSort(rest, c), qSort(sup, c)));
+        return concat(
+                    concat(qSort(inf, c), list(l.head(), rest)),
+                    qSort(sup, c)
+                );
     }
 
     public static <T> Optional<T> min(List<T> l, Comparator<T> c) {

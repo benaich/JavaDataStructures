@@ -54,7 +54,7 @@ public class CuckooHashTable<K, V> implements HashTableInterface<K, V> {
     }
     
     @Override
-    public double getDistribution(){return 0;};
+    public double getDistribution(){return 0;}
 
     @Override
     public int indexOf(K key) {
@@ -92,7 +92,8 @@ public class CuckooHashTable<K, V> implements HashTableInterface<K, V> {
     }
 
     public void put(Node<K, V> node, int nuberOftries) {
-        if(nuberOftries==0)rehache(tableSize);
+        if(nuberOftries==0)
+            rehache(tableSize);
         int index = (node.getStatus()) ? 1 : 0;
         int hachCode = node.hachCode[index];
         Node<K, V> tmp = array[index][hachCode];

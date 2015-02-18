@@ -9,13 +9,6 @@ public class Person {
     private List<Person> candidates;
     private int candidateIndex;
 
-    public List<Person> getCandidates() {
-        return candidates;
-    }
-
-    public int getCandidateIndex() {
-        return candidateIndex;
-    }
 
     Person(String name) {
         this.name = name;
@@ -23,27 +16,31 @@ public class Person {
         this.candidates = new ArrayList<>(); 
         this.candidateIndex = 0;
     }
-
-    public void setCandidates(Person... candidates) {
-        this.candidates.addAll(Arrays.asList(candidates));
-    }
-
-    public void setCandidateIndex(int candidateIndex) {
-        this.candidateIndex = candidateIndex;
-    }
     
+    /* getters & setters */
     public String getName(){
         return this.name;
     }
     public void setName(String name) {
         this.name = name;
     }
-    
     public Person getPartner(){
         return this.partner;
     }
     public void setPartner(Person partner) {
         this.partner = partner;
+    }
+    public List<Person> getCandidates() {
+        return candidates;
+    }
+    public void setCandidates(Person... candidates) {
+        this.candidates.addAll(Arrays.asList(candidates));
+    }
+    public int getCandidateIndex() {
+        return candidateIndex;
+    }
+    public void setCandidateIndex(int candidateIndex) {
+        this.candidateIndex = candidateIndex;
     }
     
     /* get the prefered person from the available list */
@@ -64,10 +61,11 @@ public class Person {
         return (this.rank(p) < this.rank(this.partner));
     }
     
+    /* engage this person to a partner */
     public void engageTo(Person p){
-        if(p.partner != null) p.partner.partner = null;
+        if(p.partner != null) p.partner.setPartner(null);
         p.partner = this;
-        if(this.partner != null) this.partner.partner = null;
+        if(this.partner != null) this.partner.setPartner(null);
         this.partner = p;
     }
 }

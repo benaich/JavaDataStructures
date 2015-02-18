@@ -135,13 +135,13 @@ public class Graph {
         
         int from=0, to=6;
         System.out.println("------- getShortestPath from " +from+ " To " +to+" -------");
-        Stack<Edge> path = g.getShortestPath(0, 6);
+        Stack<Edge> path = g.getShortestPath(from, to);
         System.out.print(from);
         while (!path.isEmpty()) {            
             System.out.print(" -> " + path.pop().to());
         }
         
-        System.out.println("Done");
+        System.out.println("");
     }
 }
 

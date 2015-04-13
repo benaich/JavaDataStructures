@@ -8,30 +8,12 @@ public class ECC {
 
     public static int PAD = 5;
     public static final Random r = new Random();
-    public static final long AUXILIARY_CONSTANT_LONG = 1000;
-    public static final BigInteger AUXILIARY_CONSTANT = BigInteger.valueOf(AUXILIARY_CONSTANT_LONG);
-
-    // The execution time of the last action, in millisecond.
-    private static long executionTime = -1;
-    private static long startExecutionTime;
     
     private HashMap<Point, Integer> pointTable;
     private HashMap<Integer, Point> charTable;
 
     public static Random getRandom() {
         return r;
-    }
-
-    private static void initializeExecutionTime() {
-        startExecutionTime = System.currentTimeMillis();
-    }
-
-    private static void finalizeExecutionTime() {
-        executionTime = System.currentTimeMillis() - startExecutionTime;
-    }
-
-    public static HashMap<Character, Point> getCodeTable() {
-        return null;
     }
 
     private int[] encrypt(String msg, PublicKey key) {
@@ -95,14 +77,18 @@ public class ECC {
         Point p = curve.multiply(curve.getBasePoint(), 2);
         charTable = new HashMap<>();
         pointTable = new HashMap<>();
-        int i;
-        for (i = 0; i < 26; i++) {
+        for (int i = 0; i < 26; i++) {
             do{
                 p = curve.add(p, p);
             }while(p.isInfinity());
             charTable.put(i + 97, p); // 0 here refers to char 97 witch is a 
         }
         //special characters
+        int[] codeAscii = new int[]{39, 44, 46, 58, 59};
+        for(int i: codeAscii){
+            p = curve.add(p, p);
+            charTable.put(i, p);
+        }
         charTable.put(32, Point.getInfinity()); 
         for(Integer key : charTable.keySet()){
             pointTable.put(charTable.get(key), key);
@@ -114,7 +100,7 @@ public class ECC {
         EllipticCurve c = new EllipticCurve(4, 20, 29, new Point(1, 5));
         ecc.initCodeTable(c);
         
-        String msg = "i understood the importance in principle of public key cryptography but it is all moved much faster than i expected i did not expect it to be a mainstay of advanced communications technology";
+        String msg = "i understood the importance in principle of public key cryptography, but it is all moved much faster than i expected i did not expect it to be a mainstay of advanced communications technology";
         // generate pair of keys
         KeyPair keys = generateKeyPair(c);
         // encrypt the msg

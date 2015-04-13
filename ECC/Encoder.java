@@ -49,8 +49,4 @@ public class Encoder {
         return Helpers.listToMatrix(bList);
     }
 
-
-    
-    
-    
 }

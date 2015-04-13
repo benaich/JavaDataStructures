@@ -277,7 +277,8 @@ public class TreapModule {
             seed.add(emptyTreap());
             seed.add(emptyTreap());
         }
-        if(a.isEmpty())return seed;
+        if(a.isEmpty())
+            return seed;
         if (a.min().compareTo(x) > 0) {
             seed.set(0, a);
             return seed;

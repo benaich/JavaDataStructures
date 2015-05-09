@@ -14,23 +14,23 @@ public class Encoder {
     }
     
     public Matrix encode(String plainText) {
-        Matrix A = createMatrix(plainText);
+        Matrix mMatrix = createMatrix(plainText);
         int w = new BigInteger(ECC.PAD, ECC.getRandom()).intValue();
         int[] bits = Helpers.toBinary(ECC.getRandom().nextInt(1024), ECC.PAD * 2);
         int bit, i = 0;
         do {
             bit = bits[i];
             if (bit == 0) {
-                A.scramble(true);
+                mMatrix.scramble(true);
             } else {
-                A.scramble(false);
+                mMatrix.scramble(false);
             }
             if (i == bits.length) {
                 i = 0;
             }
             w--;
         } while (w > 0);
-        return A;
+        return mMatrix;
     }
 
     private Matrix createMatrix(String plainText) {

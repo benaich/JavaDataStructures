@@ -7,9 +7,9 @@ import java.util.List;
 
 public class Matrix {
 
-    private String[][] data;
-    private int rows;
-    private int columns;
+    private final String[][] data;
+    private final int rows;
+    private final int columns;
 
     public Matrix(String[][] data) {
         this.data = data;
@@ -38,46 +38,39 @@ public class Matrix {
     }
 
     public static Matrix make(int[] array) {
-        int m = ECC.PAD;
-        int keyLength = 2 * m;
-        Integer[] newArray = new Integer[(array.length - keyLength)];
-        int n = newArray.length / keyLength;
-        String[][] data = new String[m][n];
+        int keyLength = 2 * ECC.PAD;
+        Integer[] data = new Integer[(array.length - keyLength)];
         
         // get the matrix
-        for (int i = 0; i < newArray.length; i++) {
-            newArray[i] = array[i + keyLength];
+        for (int i = 0; i < data.length; i++) {
+            data[i] = array[i + keyLength];
         }
-        Matrix M = Helpers.listToMatrix(Arrays.asList(newArray));
+        Matrix M = Helpers.listToMatrix(Arrays.asList(data));
 
         return M;
     }
 
     public void scramble(boolean type) {
-        int n, m, r1, r2, c1, c2, x1, x2, op;
+        int n, m, row1, row2, col1, col2, x1, x2, op;
         n = data[0].length;
         m = data.length;
-        r1 = ECC.getRandom().nextInt(m);
-        do {
-            r2 = ECC.getRandom().nextInt(m);	// r1 != r2
-        } while (r2 == r1);
-        c1 = ECC.getRandom().nextInt(n);
-        do {
-            c2 = ECC.getRandom().nextInt(n);
-        } while (c2 == c1);
+        row1 = ECC.getRandom().nextInt(m);
+        row2 = Helpers.getNotEqualTo(row1, m);
+        col1 = ECC.getRandom().nextInt(n);
+        col2 = Helpers.getNotEqualTo(col1, m);
         op = new BigInteger(2, ECC.getRandom()).intValue();     //operations:
         if (type) {
-            x1 = Integer.min(c1, c2); // first index
-            x2 = Integer.max(c1, c2); // last index
-            rowTrasformation(r1, x1, x2, op);
-            rowTrasformation(r2, x1, x2, op);
-            log("R", op, r1, r2, x1, x2);
+            x1 = Integer.min(col1, col2); // first index
+            x2 = Integer.max(col1, col2); // last index
+            rowTrasformation(row1, x1, x2, op);
+            rowTrasformation(row2, x1, x2, op);
+            log("R", op, row1, row2, x1, x2);
         } else {
-            x1 = Integer.min(r1, r2);
-            x2 = Integer.max(r1, r2);
-            columnTrasformation(c1, x1, x2, op);
-            columnTrasformation(c2, x1, x2, op);
-            log("C", op, c1, c2, x1, x2);
+            x1 = Integer.min(row1, row2);
+            x2 = Integer.max(row1, row2);
+            columnTrasformation(col1, x1, x2, op);
+            columnTrasformation(col2, x1, x2, op);
+            log("C", op, col1, col2, x1, x2);
         }
     }
 

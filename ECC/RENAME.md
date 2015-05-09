@@ -6,7 +6,7 @@ Bob
 		0 < a and b < p
 		-(4a3+27b2) != 0
 		y^2 = x^3 + ax + b
-	P point in E
+	P a point generator in E
 	n random integer => secret
 	compute nP
 
@@ -22,12 +22,12 @@ ECC public key
 ==============
 
 Bob
-	p a prime namber
+	p a prime number
 	E(a,b) where 
 		0 < a and b < p
 		-(4a3+27b2) != 0
 		y^2 = x^3 + ax + b
-	P point in E
+	P point generator in E
 	n random integer => private key
 	nP => public key
 
@@ -36,6 +36,7 @@ Alice
 	want to send a M point to Bob
 	m random integer => private key
 	mP  => public key
+        map message to a set of points (M) in E
 	send (mP, M + nmP) to Bob
 
 Bob
@@ -73,15 +74,15 @@ send msg = "hello"
 			  ...      ...    Qn(xn,yn)
 		] 
 
-	encryption points: C = (mP, Q + m(nP))
+	encryption points: Ci = Q + m(nP)
 	C = [
 			C1	C2	C3
 			..	..	..
 			..	..	Cn
 		]
-	send(mP, Q + m(nP))
+	send(mP, C)
 
-	decryption points: D = Q + m(nP) - n(mP) = Q
+	decryption points: Di = Ci - n(mP) = Qi + m(nP) - n(mP) = Qi
 	D = [
 			Q1	Q2	Q3
 			..	..	..

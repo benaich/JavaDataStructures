@@ -12,6 +12,15 @@ public class ECC {
     private HashMap<Point, Integer> pointTable;
     private HashMap<Integer, Point> charTable;
 
+    private Encoder mEncoder;
+    private Decoder mDecoder;
+
+    public ECC(EllipticCurve c){
+        initCodeTable(c);
+        this.mEncoder = new Encoder(charTable);
+        this.mDecoder = new Decoder(pointTable);
+    }
+
     public static Random getRandom() {
         return r;
     }
@@ -23,16 +32,17 @@ public class ECC {
         BigInteger p = c.getP();
         int numBits = p.bitLength();
         BigInteger k;
+
         do {
             k = new BigInteger(numBits, getRandom());
         } while (k.mod(p).compareTo(BigInteger.ZERO) == 0);
         Point sharedSecret = c.multiply(publicKey, k);
+
         Point keyHint = c.multiply(g, k); // key to send
 
-        Encoder encoder = new Encoder(charTable);
-        Matrix M = encoder.encode(msg);
-        M.performAddition(Helpers.toBinary(sharedSecret));
-        return M.toArray(Helpers.toBinary(keyHint));
+        Matrix mMatrix = mEncoder.encode(msg);
+        mMatrix.performAddition(Helpers.toBinary(sharedSecret));
+        return mMatrix.toArray(Helpers.toBinary(keyHint));
     }
 
     private String decrypt(int[] cipherText, PrivateKey key) {
@@ -40,15 +50,16 @@ public class ECC {
         Point g = c.getBasePoint();
         BigInteger privateKey = key.getKey();
         BigInteger p = c.getP();
-        Point recivedPoint = Point.make(cipherText);
-        Point sharedSecret = c.multiply(recivedPoint, privateKey);
+
+        Point keyHint = Point.make(cipherText);
+        Point sharedSecret = c.multiply(keyHint, privateKey);
+        
         //get the decypted matrix
-        Matrix M = Matrix.make(cipherText);
+        Matrix mMatrix = Matrix.make(cipherText);
         //substract the key form the matrix
-        M.performSubstraction(Helpers.toBinary(sharedSecret));
+        mMatrix.performSubstraction(Helpers.toBinary(sharedSecret));
         //decode the matrix
-        Decoder decoder = new Decoder(pointTable);
-        return decoder.decode(M);
+        return mDecoder.decode(mMatrix);
     }
 
     /**
@@ -66,14 +77,13 @@ public class ECC {
         Point g = c.getBasePoint();
         Point publicKey = c.multiply(g, privateKey);
 
-        KeyPair result = new KeyPair(
+        return new KeyPair(
                 new PublicKey(c, publicKey),
                 new PrivateKey(c, privateKey)
         );
-        return result;
     }
     
-    public void initCodeTable(EllipticCurve curve){
+    public final void initCodeTable(EllipticCurve curve){
         Point p = curve.multiply(curve.getBasePoint(), 2);
         charTable = new HashMap<>();
         pointTable = new HashMap<>();
@@ -84,21 +94,21 @@ public class ECC {
             charTable.put(i + 97, p); // 0 here refers to char 97 witch is a 
         }
         //special characters
-        int[] codeAscii = new int[]{39, 44, 46, 58, 59};
-        for(int i: codeAscii){
+        int[] specialCharAscii = new int[]{39, 44, 46, 58, 59};
+        for(int i: specialCharAscii){
             p = curve.add(p, p);
             charTable.put(i, p);
         }
-        charTable.put(32, Point.getInfinity()); 
+        charTable.put(32, Point.getInfinity()); //space
+        //populate the points symbol table
         for(Integer key : charTable.keySet()){
             pointTable.put(charTable.get(key), key);
         }
     }
 
     public static void main(String[] args) {
-        ECC ecc = new ECC();
         EllipticCurve c = new EllipticCurve(4, 20, 29, new Point(1, 5));
-        ecc.initCodeTable(c);
+        ECC ecc = new ECC(c);
         
         String msg = "i understood the importance in principle of public key cryptography, but it is all moved much faster than i expected i did not expect it to be a mainstay of advanced communications technology";
         // generate pair of keys

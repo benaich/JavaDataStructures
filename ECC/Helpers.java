@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,8 +15,9 @@ import java.util.logging.Logger;
 
 public class Helpers {
 
-    public static File SUB_KEYS_FILE = new File("subkey");
-    public static int[] toBinary(int n, int base) {
+    static final File SUB_KEYS_FILE = new File("subkey");
+    
+    static int[] toBinary(int n, int base) {
         final int[] bits = new int[base];
         for (int i = 0; i < base; i++) {
             bits[i] = n >> i & 1;
@@ -43,7 +43,7 @@ public class Helpers {
     }
 
     static Matrix listToMatrix(List<Integer> list) {
-        int n, m, row, col = 0;
+        int n, m, row, col;
         n = ECC.PAD; 
         m = list.size() / (2 * n);
         String[][] bits = new String[n][m];
@@ -98,23 +98,32 @@ public class Helpers {
     }
 
     static void print(String[] tab) {
-        for (int i = 0; i < tab.length; i++) {
-            System.out.println(tab[i] + " ");
+        for (String tab1 : tab) {
+            System.out.println(tab1 + " ");
         }
     }
+    
     static void print(int[] tab) {
         byte b;
-        for (int i = 0; i < tab.length; i++) {
-            b = (byte)tab[i];
+        for(int i : tab){
+            b = (byte)i;
             System.out.print(b);
         }
         System.out.println("");
     }
-    public static void main(String[] args) {
+    
+    static int getNotEqualTo(int a, int limit) {
+        int b;
+        do {
+            b = ECC.getRandom().nextInt(limit);
+        } while (b == a);
+        return b;
+    }
+    
+    static void main(String[] args) {
         for(int a : toBinary(15, 5)){
             System.out.print(a);
         }
-        
         System.out.println(" :"+Character.toString ((char) 32)+":");
     }
 }

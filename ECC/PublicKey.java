@@ -9,46 +9,46 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-/** 
- * The key consists of:
- * c, the elliptic curve used in the calculations,
- * pK, the point obtained from k * G, where k is the corresponding private key
- * and G is the base point of c.
+/**
+ * The key consists of: c, the elliptic curve used in the calculations, pK, the
+ * point obtained from k * G, where k is the corresponding private key and G is
+ * the base point of c.
  */
 public class PublicKey {
-    private EllipticCurve curve;
+
+    private EllipticCurve c;
     private Point pK;
 
     public PublicKey(EllipticCurve c, Point pK) {
-        this.curve = c;
+        this.c = c;
         this.pK = pK;
     }
-    
-    public PublicKey(String pathFile){
+
+    public PublicKey(String pathFile) {
         try {
             List<String> lines = Files.readAllLines(Paths.get(pathFile), StandardCharsets.UTF_8);
-            BigInteger a = new BigInteger(lines.get(0),16);
-            BigInteger b = new BigInteger(lines.get(1),16);
-            BigInteger p = new BigInteger(lines.get(2),16);
-            BigInteger g1 = new BigInteger(lines.get(3),16);
-            BigInteger g2 = new BigInteger(lines.get(4),16);
-            BigInteger pK1 = new BigInteger(lines.get(5),16);
-            BigInteger pK2 = new BigInteger(lines.get(6),16);
-            EllipticCurve eC = new EllipticCurve(a, b, p, new Point(g1,g2));
-            Point eCP = new Point(pK1,pK2);
-            this.curve = eC;
+            BigInteger a = new BigInteger(lines.get(0), 16);
+            BigInteger b = new BigInteger(lines.get(1), 16);
+            BigInteger p = new BigInteger(lines.get(2), 16);
+            BigInteger g1 = new BigInteger(lines.get(3), 16);
+            BigInteger g2 = new BigInteger(lines.get(4), 16);
+            BigInteger pK1 = new BigInteger(lines.get(5), 16);
+            BigInteger pK2 = new BigInteger(lines.get(6), 16);
+            EllipticCurve eC = new EllipticCurve(a, b, p, new Point(g1, g2));
+            Point eCP = new Point(pK1, pK2);
+            this.c = eC;
             this.pK = eCP;
-        } catch (Exception e){
-            
-        } 
+        } catch (Exception e) {
+
+        }
     }
-    
+
     public EllipticCurve getCurve() {
-        return curve;
+        return c;
     }
-    
+
     public void setCurve(EllipticCurve c) {
-        this.curve = c;
+        this.c = c;
     }
 
     public Point getKey() {
@@ -58,35 +58,34 @@ public class PublicKey {
     public void setKey(Point pK) {
         this.pK = pK;
     }
-    
+
     public Point getBasePoint() {
-        return curve.getBasePoint();
+        return c.getBasePoint();
     }
-    
+
     /**
      * Save the current key to a *.pub file.
+     *
+     * @param path
      */
     public void saveToFile(String path) {
-        
-        BigInteger a = curve.getA();
-        BigInteger b = curve.getB();
-        BigInteger p = curve.getP();
-        BigInteger g1 = curve.getBasePoint().getX();
-        BigInteger g2 = curve.getBasePoint().getY();
-        BigInteger pK1 = pK.getX();
-        BigInteger pK2 = pK.getY();
-        try {
-            PrintStream ps = new PrintStream(new File(path));
+        BigInteger a = c.getA();
+        BigInteger b = c.getB();
+        BigInteger p = c.getP();
+        BigInteger g1 = c.getBasePoint().getX();
+        BigInteger g2 = c.getBasePoint().getY();
+        BigInteger pKx = pK.getX();
+        BigInteger pKy = pK.getY();
+        try (PrintStream ps = new PrintStream(new File(path))) {
             ps.println(a.toString(16));
             ps.println(b.toString(16));
             ps.println(p.toString(16));
             ps.println(g1.toString(16));
             ps.println(g2.toString(16));
-            ps.println(pK1.toString(16));
-            ps.println(pK2.toString(16));
+            ps.println(pKx.toString(16));
+            ps.println(pKy.toString(16));
             ps.close();
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
         }
     }
 }

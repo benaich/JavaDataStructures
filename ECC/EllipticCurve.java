@@ -55,7 +55,7 @@ public class EllipticCurve {
     /**
      * This method will check whether a point belong to this curve or not.
      */
-    public boolean contains(PointInterface point) {
+    public boolean contains(Point point) {
         if (point.isInfinity()) {
             return true;
         }
@@ -68,7 +68,7 @@ public class EllipticCurve {
     /**
      * add two point
      */
-    public Point add(PointInterface p1, PointInterface p2) {
+    public Point add(Point p1, Point p2) {
         if (p1 == null || p2 == null) {
             return null;
         }
@@ -108,7 +108,7 @@ public class EllipticCurve {
     /**
      * Subtract two points, according to this equation: p1 - p2 = p1 + (-p2),
      */
-    public Point subtract(PointInterface p1, PointInterface p2) {
+    public Point subtract(Point p1, Point p2) {
         if (p1 == null || p2 == null) {
             return null;
         }

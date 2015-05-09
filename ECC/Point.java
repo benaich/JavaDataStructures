@@ -2,7 +2,7 @@ package ECC;
 
 import java.math.BigInteger;
 
-public class Point implements PointInterface{
+public class Point {
 
     private BigInteger x;
     private BigInteger y;
@@ -15,7 +15,7 @@ public class Point implements PointInterface{
         this.y = y;
         isInfinity = false;
     }
-    public Point(PointInterface p) {
+    public Point(Point p) {
         this.x = p.getX();
         this.y = p.getY();
         isInfinity = p.isInfinity(); 
@@ -46,12 +46,11 @@ public class Point implements PointInterface{
         return y;
     }
 
-    @Override
     public boolean isInfinity() {
         return isInfinity;
     }
     
-    public PointInterface negate() {
+    public Point negate() {
         if (isInfinity()) {
             return getInfinity();
         }

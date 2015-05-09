@@ -1,6 +1,7 @@
 ECC shared key
 ==============
 Bob
+---
 	p a prime number
 	E(a,b) where 
 		0 < a and b < p
@@ -11,7 +12,9 @@ Bob
 	compute nP
 
 	send E(a,b), P, nP to Alice
-Alice 
+
+Alice
+-----
 	m random integer => secret
 	compute mP 
 	send mP to Bob
@@ -22,6 +25,7 @@ ECC public key
 ==============
 
 Bob
+---
 	p a prime number
 	E(a,b) where 
 		0 < a and b < p
@@ -32,7 +36,9 @@ Bob
 	nP => public key
 
 	share E(a,b), P, nP to Alice
+
 Alice
+-----
 	want to send a M point to Bob
 	m random integer => private key
 	mP  => public key
@@ -40,13 +46,14 @@ Alice
 	send (mP, M + nmP) to Bob
 
 Bob
+---
 	nmP = n * mP
 	M = M + nmP - nmP = M
 
 
 Chararters Mapping to Points
 ============================
-	- E(): eleptic curve
+	- E: eleptic curve
 	- P: point generator
 	- S: set of mapping points 
 	- A: a non singular matrix
@@ -54,11 +61,13 @@ Chararters Mapping to Points
 	- m: bob's secret key
 	- n: alice's secret key
 
-send msg = "hello"
-	size = 5 not divisible by 3 (need to add 1 : $ for padding)
+Alice do the cnryption
+----------------------
+	send msg = "hello"
+	size = 5 not dided by 3 (need to add 1 : $ for padding)
 	size = 6
 	Coding:
-	map msg character using S => [P(1,0), P(1,7), P(2,3), P(2,3), P(2,0), $]
+	map msg characters to list of points in E: S => [P(1,0), P(1,7), P(2,3), P(2,3), P(2,0), $]
 	create a matrix M of 3 rows like so
 	M = [	
 			P(1,0) P(1,7)
@@ -82,7 +91,10 @@ send msg = "hello"
 		]
 	send(mP, C)
 
-	decryption points: Di = Ci - n(mP) = Qi + m(nP) - n(mP) = Qi
+Bob do the decryption
+---------------------
+	receive(mP, C)
+	bob decrypt the points using his private key n : Di = Ci - n(mP) = Qi + m(nP) - n(mP) = Qi
 	D = [
 			Q1	Q2	Q3
 			..	..	..
@@ -92,14 +104,18 @@ send msg = "hello"
 	M = D * A-1
 
 
-
-Biobliographie
+References
 ==============
 	+ [1] http://en.wikipedia.org/wiki/Elliptic_curve_cryptography
 	+ [2] https://www.certicom.com/index.php/ecc-tutorial
 	+ [3] http://www.eccworkshop.org/
 
+
 	books:
 	+ [4] William Stalings
+	+ [5] Stallings, W. Cryptography and Network Security, (2003) Prentice Hall, 3rd Edition.
+	+ [6] V. S. Miller. Use of Elliptic Curves in Cryptography. Advances in Cryptology CRYPTO’85, pp. 417-426, 1986.
+	+ [7] N. Koblitz. Elliptic Curve Cryptosystems. Mathematics of Computation, Vol. 48, No. 177, pp. 203-209, 1987.
+	+ [8] Zhu Yufei, Zhang Yajuan. Introduction to elliptic curve cryptosystem. Beijing: Science press, 10, 130 (in chinese), 2006.
 
 

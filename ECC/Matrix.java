@@ -252,7 +252,7 @@ public class Matrix {
     }
 
     public void log(String t, int op, int a, int b, int c, int d) {
-        //System.out.println("subkey : " + t + "/" + op + "/" + a + "/" + b + "/" + c + "/" + d);
+        System.out.println("subkey : " + t + "/" + op + "/" + a + "/" + b + "/" + c + "/" + d);
         Helpers.saveSubKey(t, op, a, b, c, d);
     }
 }

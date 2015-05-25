@@ -32,16 +32,26 @@ public class ECC {
         BigInteger p = c.getP();
         int numBits = p.bitLength();
         BigInteger k;
-
         do {
             k = new BigInteger(numBits, getRandom());
         } while (k.mod(p).compareTo(BigInteger.ZERO) == 0);
         Point sharedSecret = c.multiply(publicKey, k);
 
         Point keyHint = c.multiply(g, k); // key to send
-
+        
+        System.out.println("----------------- Encrypt -----------------");
+        System.out.println("Msg to encrypt : " + msg);
+        System.out.println("Bob public key : " + publicKey);
+        System.out.println("Alice private key : " + k);
+        System.out.println("sharedSecret : " + sharedSecret);
+        
+        System.out.println("keyHint : " + keyHint);
         Matrix mMatrix = mEncoder.encode(msg);
         mMatrix.performAddition(Helpers.toBinary(sharedSecret));
+        System.out.println("sharedSecret bit format :");
+        Helpers.print(Helpers.toBinary(sharedSecret));
+        System.out.println("encrypted matrix (code addition) :");
+        System.out.println(mMatrix);
         return mMatrix.toArray(Helpers.toBinary(keyHint));
     }
 
@@ -50,14 +60,21 @@ public class ECC {
         Point g = c.getBasePoint();
         BigInteger privateKey = key.getKey();
         BigInteger p = c.getP();
-
+        
         Point keyHint = Point.make(cipherText);
         Point sharedSecret = c.multiply(keyHint, privateKey);
         
+        System.out.println("decrypt cipher :");
+        Helpers.print(cipherText);
+        
         //get the decypted matrix
         Matrix mMatrix = Matrix.make(cipherText);
+        System.out.println("Matrix before substraction");
+        System.out.println(mMatrix);
         //substract the key form the matrix
         mMatrix.performSubstraction(Helpers.toBinary(sharedSecret));
+        System.out.println("Matrix after substraction");
+        System.out.println(mMatrix);
         //decode the matrix
         return mDecoder.decode(mMatrix);
     }
@@ -111,6 +128,7 @@ public class ECC {
         ECC ecc = new ECC(c);
         
         String msg = "i understood the importance in principle of public key cryptography, but it is all moved much faster than i expected i did not expect it to be a mainstay of advanced communications technology";
+        msg = "hi there";
         // generate pair of keys
         KeyPair keys = generateKeyPair(c);
         // encrypt the msg
@@ -119,8 +137,8 @@ public class ECC {
         // decrypt the result
         String plainText = ecc.decrypt(cipherText, keys.getPrivateKey());
 
-        System.out.println("Cipher : ");
-        Helpers.print(cipherText);
+        //System.out.println("Cipher : ");
+        //Helpers.print(cipherText);
         System.out.println("Plain text : \n" + plainText);
     }
 }

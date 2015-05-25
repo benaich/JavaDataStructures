@@ -15,8 +15,13 @@ public class Encoder {
     
     public Matrix encode(String plainText) {
         Matrix mMatrix = createMatrix(plainText);
-        int w = new BigInteger(ECC.PAD, ECC.getRandom()).intValue();
+        System.out.println("Matrix before scrambling : ");
+        System.out.println(mMatrix);
+        //int w = new BigInteger(ECC.PAD, ECC.getRandom()).intValue();
+        int w = 6;
         int[] bits = Helpers.toBinary(ECC.getRandom().nextInt(1024), ECC.PAD * 2);
+        System.out.println("Bits : ");
+        Helpers.print(bits);
         int bit, i = 0;
         do {
             bit = bits[i];
@@ -28,6 +33,8 @@ public class Encoder {
             if (i == bits.length) {
                 i = 0;
             }
+            System.out.println("scrambling...");
+            System.out.println(mMatrix);
             w--;
         } while (w > 0);
         return mMatrix;
@@ -39,6 +46,9 @@ public class Encoder {
             Point p = charTable.get((int)c.charValue());
             pList.add(p);
         }
+        System.out.print("List of Points : ");
+        pList.stream().forEach(System.out::print);
+        System.out.println("");
         List<Integer> bList = new ArrayList<>();
         for (Point p : pList) {
             String str = toBinary(p.getX()) + "" + toBinary(p.getY());

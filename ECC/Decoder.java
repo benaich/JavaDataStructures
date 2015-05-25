@@ -23,14 +23,15 @@ public class Decoder {
             int c = Integer.parseInt(array[4]);
             int d = Integer.parseInt(array[5]);
             if (transformation.equals("R")) {
-                //System.out.println("subkey : R/" + op + "/" + a + "/" + b + "/" + c + "/" + d);
                 A.reverseRowTrasformation(a, c, d, op);
                 A.reverseRowTrasformation(b, c, d, op);
             } else {
-                //System.out.println("subkey : C/" + op + "/" + a + "/" + b + "/" + c + "/" + d);
                 A.reverseColumnTrasformation(a, c, d, op);
                 A.reverseColumnTrasformation(b, c, d, op);
             }
+            System.out.println("sub-key : " + subKey);
+            System.out.println("Fixing...");
+            System.out.println(A);
         }
         return getPlainText(A);
     }

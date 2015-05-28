@@ -157,4 +157,10 @@ public class EllipticCurve {
             System.out.println(p + " x " + i + " = " + e.multiply(p, i));
         }
     }
+
+    @Override
+    public String toString() {
+        return "(EC) " + "y^2 = x^3 + " + a + "x + " + b + "c mod " + p + "\n G = " + basePoint + '}';
+    }
+    
 }

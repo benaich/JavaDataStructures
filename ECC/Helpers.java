@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class Helpers {
 
     static final File SUB_KEYS_FILE = new File("subkey");
-    
+
     static int[] toBinary(int n, int base) {
         final int[] bits = new int[base];
         for (int i = 0; i < base; i++) {
@@ -37,14 +37,14 @@ public class Helpers {
         String[] tab = new String[ECC.PAD];
         String str = toBinary(p.getX()) + "" + toBinary(p.getY());
         for (int i = 0; i < str.length(); i = i + 2) {
-            tab[i/2] = str.charAt(i) + "" + str.charAt(i + 1);
+            tab[i / 2] = str.charAt(i) + "" + str.charAt(i + 1);
         }
         return tab;
     }
 
     static Matrix listToMatrix(List<Integer> list) {
         int n, m, row, col;
-        n = ECC.PAD; 
+        n = ECC.PAD;
         m = list.size() / (2 * n);
         String[][] bits = new String[n][m];
         for (int i = 0; i < list.size(); i = i + 2) {
@@ -102,16 +102,16 @@ public class Helpers {
             System.out.println(tab1 + " ");
         }
     }
-    
+
     static void print(int[] tab) {
         byte b;
-        for(int i : tab){
-            b = (byte)i;
+        for (int i : tab) {
+            b = (byte) i;
             System.out.print(b);
         }
         System.out.println("");
     }
-    
+
     static int getNotEqualTo(int a, int limit) {
         int b;
         do {
@@ -119,11 +119,11 @@ public class Helpers {
         } while (b == a);
         return b;
     }
-    
+
     static void main(String[] args) {
-        for(int a : toBinary(15, 5)){
+        for (int a : toBinary(15, 5)) {
             System.out.print(a);
         }
-        System.out.println(" :"+Character.toString ((char) 32)+":");
+        System.out.println(" :" + Character.toString((char) 32) + ":");
     }
 }

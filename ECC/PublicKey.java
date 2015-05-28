@@ -1,7 +1,6 @@
 package ECC;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.PrintStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -61,31 +60,5 @@ public class PublicKey {
 
     public Point getBasePoint() {
         return c.getBasePoint();
-    }
-
-    /**
-     * Save the current key to a *.pub file.
-     *
-     * @param path
-     */
-    public void saveToFile(String path) {
-        BigInteger a = c.getA();
-        BigInteger b = c.getB();
-        BigInteger p = c.getP();
-        BigInteger g1 = c.getBasePoint().getX();
-        BigInteger g2 = c.getBasePoint().getY();
-        BigInteger pKx = pK.getX();
-        BigInteger pKy = pK.getY();
-        try (PrintStream ps = new PrintStream(new File(path))) {
-            ps.println(a.toString(16));
-            ps.println(b.toString(16));
-            ps.println(p.toString(16));
-            ps.println(g1.toString(16));
-            ps.println(g2.toString(16));
-            ps.println(pKx.toString(16));
-            ps.println(pKy.toString(16));
-            ps.close();
-        } catch (Exception e) {
-        }
     }
 }

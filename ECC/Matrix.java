@@ -40,7 +40,6 @@ public class Matrix {
     public static Matrix make(int[] array) {
         int keyLength = 2 * ECC.PAD;
         Integer[] data = new Integer[(array.length - keyLength)];
-        
         // get the matrix
         for (int i = 0; i < data.length; i++) {
             data[i] = array[i + keyLength];
@@ -205,9 +204,9 @@ public class Matrix {
         int[] array = new int[countColumns() * countRows() * 2 + keySize];
         //append the key first
         for (k = 0; k < keySize; k = k + 2) {
-            String str = key[k/2];
-            array[k] =  Integer.parseInt(str.charAt(0) + "");
-            array[k + 1] = Integer.parseInt(str.charAt(1)+ "");
+            String str = key[k / 2];
+            array[k] = Integer.parseInt(str.charAt(0) + "");
+            array[k + 1] = Integer.parseInt(str.charAt(1) + "");
         }
         // then add the data
         for (int i = 0; i < countColumns(); i++) {
@@ -229,9 +228,11 @@ public class Matrix {
             }
             int x = Integer.parseInt(pointCode.substring(0, pointCode.length() / 2), 2);
             int y = Integer.parseInt(pointCode.substring(pointCode.length() / 2), 2);
-            if(x==0 && y==0)
+            if (x == 0 && y == 0) {
                 list.add(Point.getInfinity());
-            else list.add(new Point(x, y));
+            } else {
+                list.add(new Point(x, y));
+            }
         }
         return list;
     }

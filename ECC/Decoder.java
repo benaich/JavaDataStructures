@@ -30,7 +30,6 @@ public class Decoder {
                 A.reverseColumnTrasformation(b, c, d, op);
             }
             System.out.println("sub-key : " + subKey);
-            System.out.println("Fixing...");
             System.out.println(A);
         }
         return getPlainText(A);

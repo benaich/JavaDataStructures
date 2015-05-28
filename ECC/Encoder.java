@@ -7,20 +7,20 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Encoder {
+
     private HashMap<Integer, Point> charTable;
-    
+
     public Encoder(HashMap<Integer, Point> charTable) {
         this.charTable = charTable;
     }
-    
+
     public Matrix encode(String plainText) {
         Matrix mMatrix = createMatrix(plainText);
         System.out.println("Matrix before scrambling : ");
         System.out.println(mMatrix);
-        //int w = new BigInteger(ECC.PAD, ECC.getRandom()).intValue();
-        int w = 6;
+        int w = new BigInteger(ECC.PAD, ECC.getRandom()).intValue();
         int[] bits = Helpers.toBinary(ECC.getRandom().nextInt(1024), ECC.PAD * 2);
-        System.out.println("Bits : ");
+        System.out.println("w : " + w + " Bits :");
         Helpers.print(bits);
         int bit, i = 0;
         do {
@@ -30,8 +30,10 @@ public class Encoder {
             } else {
                 mMatrix.scramble(false);
             }
-            if (i == bits.length) {
+            if (i == bits.length - 1) {
                 i = 0;
+            }else{
+                i++;
             }
             System.out.println("scrambling...");
             System.out.println(mMatrix);
@@ -43,7 +45,7 @@ public class Encoder {
     private Matrix createMatrix(String plainText) {
         List<Point> pList = new ArrayList<>();
         for (Character c : plainText.toCharArray()) {
-            Point p = charTable.get((int)c.charValue());
+            Point p = charTable.get((int) c.charValue());
             pList.add(p);
         }
         System.out.print("List of Points : ");

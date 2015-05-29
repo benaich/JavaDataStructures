@@ -16,11 +16,13 @@ public class Encoder {
 
     public Matrix encode(String plainText) {
         Matrix mMatrix = createMatrix(plainText);
-        System.out.println("Matrix before scrambling : ");
+        System.out.println("\n2) Convert the list of points to a binary Matrix");
         System.out.println(mMatrix);
+        System.out.println("\n3) Matrix Scrambling");
         int w = new BigInteger(ECC.PAD, ECC.getRandom()).intValue();
         int[] bits = Helpers.toBinary(ECC.getRandom().nextInt(1024), ECC.PAD * 2);
-        System.out.println("w : " + w + " Bits :");
+        System.out.println("number of transformations, w = " + w);
+        System.out.println("Random sequence of bits, Bits = ");
         Helpers.print(bits);
         int bit, i = 0;
         do {
@@ -35,7 +37,7 @@ public class Encoder {
             }else{
                 i++;
             }
-            System.out.println("scrambling...");
+            //System.out.println("scrambling...");
             System.out.println(mMatrix);
             w--;
         } while (w > 0);
@@ -48,7 +50,7 @@ public class Encoder {
             Point p = charTable.get((int) c.charValue());
             pList.add(p);
         }
-        System.out.print("List of Points : ");
+        System.out.println("\n1) Convert m to a list of Points");
         pList.stream().forEach(System.out::print);
         System.out.println("");
         List<Integer> bList = new ArrayList<>();

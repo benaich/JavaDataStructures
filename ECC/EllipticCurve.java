@@ -160,7 +160,7 @@ public class EllipticCurve {
 
     @Override
     public String toString() {
-        return "(EC) " + "y^2 = x^3 + " + a + "x + " + b + "c mod " + p + "\n G = " + basePoint + '}';
+        return "EllipticCurve EC : " + "y^2 = x^3 + " + a + "x + " + b + "c mod " + p + "\nGenerator point G = " + basePoint + '}';
     }
     
 }

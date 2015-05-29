@@ -37,6 +37,10 @@ public class Decoder {
 
     private String getPlainText(Matrix A) {
         String plaintText = "";
+        System.out.println("4) Convert the matrix M to a list of points");
+        A.toPoints().stream().forEach(System.out::print);
+        System.out.println("");
+        
         for (Point p : A.toPoints()) {
             if (pointTable.get(p) != null) {
                 int asciCode = pointTable.get(p);

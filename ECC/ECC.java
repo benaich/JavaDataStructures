@@ -39,18 +39,19 @@ public class ECC {
 
         Point keyHint = c.multiply(g, k); // key to send
 
-        System.out.println("----------------- Encrypt -----------------");
-        System.out.println("Msg to encrypt : " + msg);
-        System.out.println("Bob public key : " + publicKey);
-        System.out.println("Alice private key : " + k);
-        System.out.println("sharedSecret : " + sharedSecret);
-
-        System.out.println("keyHint : " + keyHint);
+        System.out.println("----------------- Encryption process -----------------");
+        System.out.println(c);
+        System.out.println("Mesage to encrypt, m = " + msg);
+        System.out.println("Bob's public key, Pb = " + publicKey);
+        System.out.println("Alice's private key, k = " + k);
+        System.out.println("The ecryption key, sharedSecret = k * Pb = " + sharedSecret);
+        System.out.println("The hint to compute sharedSecret for bob, keyHint = " + keyHint);
+        
         Matrix mMatrix = mEncoder.encode(msg);
         mMatrix.performAddition(Helpers.toBinary(sharedSecret));
-        System.out.println("sharedSecret bit format :");
+        System.out.println("sharedSecret binary format :");
         Helpers.print(Helpers.toBinary(sharedSecret));
-        System.out.println("encrypted matrix (code addition) :");
+        System.out.println("4) encrypt the matrix with sharedSecret (code addition)");
         System.out.println(mMatrix);
         return mMatrix.toArray(Helpers.toBinary(keyHint));
     }
@@ -64,18 +65,23 @@ public class ECC {
         Point keyHint = Point.make(cipherText);
         Point sharedSecret = c.multiply(keyHint, privateKey);
 
-        System.out.println("decrypt cipher :");
+        System.out.println("\n----------------- Decryption process -----------------");
+        System.out.println("1) Bob receive this :");
         Helpers.print(cipherText);
+        System.out.println("");
+        System.out.println("2) Extract keyhint and the matrix C");
+        System.out.println("KeyHint = "+keyHint);
 
         //get the decypted matrix
         Matrix mMatrix = Matrix.make(cipherText);
-        System.out.println("Matrix before substraction");
+        System.out.println("C = ");
         System.out.println(mMatrix);
         //substract the key form the matrix
         mMatrix.performSubstraction(Helpers.toBinary(sharedSecret));
         System.out.println("Matrix after substraction");
         System.out.println(mMatrix);
         //decode the matrix
+        System.out.println("3) Reverse Matrix Scrambling");
         return mDecoder.decode(mMatrix);
     }
 
@@ -135,16 +141,18 @@ public class ECC {
         EllipticCurve c = new EllipticCurve(4, 20, 29, new Point(1, 5));
         ECC ecc = new ECC(c);
         ecc.displayCodeTable();
-        System.out.println(c);
         String msg = "i understood the importance in principle of public key cryptography, but it is all moved much faster than i expected i did not expect it to be a mainstay of advanced communications technology";
         msg = "hi there";
         // generate pair of keys
         KeyPair keys = generateKeyPair(c);
         // encrypt the msg
         int[] cipherText = ecc.encrypt(msg, keys.getPublicKey());
+        System.out.println("5) Alice send this to Bob:");
+        Helpers.print(cipherText);
 
         // decrypt the result
         String plainText = ecc.decrypt(cipherText, keys.getPrivateKey());
+        System.out.println("\n5) Translate each point to a carracter");
 
         //System.out.println("Cipher : ");
         //Helpers.print(cipherText);
